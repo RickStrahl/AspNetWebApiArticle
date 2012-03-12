@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <link href="Css/Westwind.css" rel="stylesheet" type="text/css" />
+    <script src="scripts/jquery.min.js" type="text/javascript"></script>
+    <script src="scripts/ww.jquery.min.js" type="text/javascript"></script>
+</head>
+<body>
+    
+    <input type="button" id="btnSendAlbum" value="Send" onclick="" />
+
+    <script type="text/javascript">
+        var id = new Date().getDate().toString();
+        this.album = {    
+            "Id": id,
+            "AlbumName": "Power Age",
+            "Artist": "AC/DC",
+            "YearReleased": 1977,
+            "Entered": "2002-03-11T18:24:43.5580794-10:00",
+            "AlbumImageUrl": "http://www.amazon.com/gp/product/B00008WT5F/ref=as_li_ss_tl?ie=UTF8&tag=westwindtechn-20&linkCode=as2&camp=1789&creative=390957&creativeASIN=B00008WT5F",
+            "AmazonUrl": "http://www.amazon.com/Powerage-Ac-Dc/dp/B00008WT5F",
+            "Songs": [
+                {
+                    "SongName": "Rock 'n Roll Damnation",
+                },
+                {        
+                    "SongName": "Downpayment Blues"       
+                },
+                {
+                    "SongName": "Riff Raff"
+                }
+            ]
+        }
+
+$(document).ready(function () {
+
+    $("#btnSendAlbum").click(function () {
+       
+        $.ajax(
+                        {
+                            url: "albums/",
+                            type: "POST",
+                            contentType: "application/json",
+                            data: JSON.stringify(album),
+                            processData: false,
+                            dataType: "text",
+                            global: false,
+                            beforeSend: function (xhr) {
+                               //xhr.setRequestHeader("Accept","application/json");
+                            },
+                            success: function (result) {
+                                alert(result);
+                            },
+                            error: function (xhr, status, p3, p4) {                                
+                                alert("Error! " + status);
+                            }
+                        });
+
+    });
+
+
+});
+    </script>
+</body>
+</html>
