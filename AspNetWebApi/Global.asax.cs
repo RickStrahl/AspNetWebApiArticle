@@ -7,6 +7,7 @@ using System.Data;
 using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
 using MusicAlbums;
+using Westwind.Web.WebApi;
 
 namespace AspNetWebApi
 {
@@ -24,8 +25,42 @@ namespace AspNetWebApi
             //);
 
             // Action based routing (used for RPC calls)
+            //RouteTable.Routes.MapHttpRoute(
+            //    name: "StockApi",
+            //    routeTemplate: "stocks/{action}/{symbol}",
+            //    defaults: new
+            //    {
+            //        symbol = RouteParameter.Optional,
+            //        controller = "StockApi"
+            //    }
+            //);
+
+
+
+RouteTable.Routes.MapHttpRoute(
+    name: "AlbumApiActionImage",
+    routeTemplate: "albums/{title}/image",
+    defaults: new
+    {
+        title = RouteParameter.Optional,
+        controller = "AlbumApi",
+        action = "GetAlbumArt"
+    }
+);
+           RouteTable.Routes.MapHttpRoute(
+                name: "AlbumApiAction",
+                routeTemplate: "albums/{title}",
+                defaults: new
+                {
+                    title = RouteParameter.Optional,
+                    controller = "AlbumApi",
+                    action = "GetAlbums"
+                }
+            );
+
+
             RouteTable.Routes.MapHttpRoute(
-                name: "StockApi",
+                name: "StockProfileApi",
                 routeTemplate: "stocks/{action}/{symbol}",
                 defaults: new
                 {
@@ -33,37 +68,8 @@ namespace AspNetWebApi
                     controller = "StockApi"
                 }
             );
-            RouteTable.Routes.MapHttpRoute(
-                name: "StockProfileApi",
-                routeTemplate: "profile/{action}/{symbol}",
-                defaults: new
-                {
-                    symbol = RouteParameter.Optional,
-                    controller = "StockApi"
-                }
-            );
 
-            RouteTable.Routes.MapHttpRoute(
-                name: "AlbumApi",
-                routeTemplate: "albums/{id}",
-                defaults: new
-                {
-                    id=RouteParameter.Optional,
-                    controller = "AlbumApi",
-                }
-            );
-
-            RouteTable.Routes.MapHttpRoute(
-                name: "FirstApi",
-                routeTemplate: "first/{action}/{id}",
-                defaults: new 
-                {
-                    id= RouteParameter.Optional,
-                    controller= "FirstApi"
-                }
-            );
           
-
 
             // create/update database on changes
             //Database.SetInitializer<StockContext>(new StockContextInitializer());
@@ -72,10 +78,14 @@ namespace AspNetWebApi
             // WebApi Configuration to hook up formatters and message handlers
             // optional
             RegisterApis(GlobalConfiguration.Configuration);
+
+            var formatter = GlobalConfiguration.Configuration.Formatters;
+            
         }
 
         public static void RegisterApis(HttpConfiguration config)
         {
+            var formatters = config.Formatters;
 #if false
             // remove default Xml handler
             var matches = config.Formatters

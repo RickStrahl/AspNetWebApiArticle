@@ -42,8 +42,6 @@
       <HintPath>..\packages\Newtonsoft.Json.4.0.8\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.Data.Entity" />
-    <Reference Include="System.Data.SqlServerCe, Version=4.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91" />
     <Reference Include="System.Json, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>..\packages\System.Json.4.0.20126.16343\lib\net40\System.Json.dll</HintPath>
@@ -61,7 +59,6 @@
       <HintPath>..\packages\System.Net.Http.2.0.20126.16343\lib\net40\System.Net.Http.WebRequest.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Core" />
     <Reference Include="System.Web.DataVisualization" />
     <Reference Include="System.Web.Extensions" />
@@ -82,17 +79,50 @@
     <Reference Include="System.Web.Routing" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Configuration" />
-    <Reference Include="Westwind.Utilities">
-      <HintPath>..\..\..\WestWindWebToolkit\Assemblies\Westwind.Utilities.dll</HintPath>
+    <Reference Include="Westwind.Utilities, Version=1.20.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Westwind.Utilities.1.201\lib\net40\Westwind.Utilities.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Css\Images\close.gif" />
+    <Content Include="Css\Images\DialogHeader.png" />
+    <Content Include="Css\Images\DialogHighlight.png" />
+    <Content Include="Css\Images\DialogSelection.png" />
+    <Content Include="Css\Images\DialogStrip.png" />
+    <Content Include="Css\Images\edit.gif" />
+    <Content Include="Css\Images\EditBlue.gif" />
+    <Content Include="Css\Images\EditWhite.gif" />
+    <Content Include="Css\Images\HeaderGradient.png" />
+    <Content Include="Css\Images\help.gif" />
+    <Content Include="Css\Images\home.gif" />
+    <Content Include="Css\Images\Info.gif" />
+    <Content Include="Css\Images\LightBlueGradient.png" />
+    <Content Include="Css\Images\LightOrangeGradient.png" />
+    <Content Include="Css\Images\loading_black.gif" />
+    <Content Include="Css\Images\loading_small.gif" />
+    <Content Include="Css\Images\MenuHighlight.png" />
+    <Content Include="Css\Images\New.gif" />
+    <Content Include="Css\Images\next.png" />
+    <Content Include="Css\Images\prev.png" />
+    <Content Include="Css\Images\refresh.gif" />
+    <Content Include="Css\Images\Remove.gif" />
+    <Content Include="Css\Images\search.gif" />
+    <Content Include="Css\Images\Sort.gif" />
+    <Content Include="Css\Images\TabHover.gif" />
+    <Content Include="Css\Images\TabNormal.gif" />
+    <Content Include="Css\Images\TabSelected.gif" />
+    <Content Include="Css\Images\users.gif" />
+    <Content Include="Css\Images\warning.gif" />
+    <Content Include="Css\Westwind.css" />
     <Content Include="default.aspx" />
+    <Content Include="GetAlbums.htm" />
     <Content Include="Global.asax" />
+    <Content Include="PostAlbum.htm" />
     <Content Include="scripts\jquery-vsdoc.js" />
     <Content Include="scripts\jquery.js" />
     <Content Include="scripts\jquery.min-vsdoc.js" />
     <Content Include="scripts\jquery.min.js" />
+    <Content Include="scripts\knockout-2.0.0.js" />
     <Content Include="scripts\ww.jquery.js" />
     <Content Include="scripts\ww.jquery.min.js" />
     <Content Include="Web.config" />
@@ -104,7 +134,16 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Code\WebApi\Formatters\JavaScriptSerializerFormatter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Code\WebApi\Formatters\JsonNetFormatter.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Controllers\AlbumApiController.cs" />
+    <Compile Include="Controllers\StockApiController.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Model\MusicAlbums\Album.cs" />
     <Compile Include="default.aspx.cs">
       <DependentUpon>default.aspx</DependentUpon>
@@ -115,6 +154,24 @@
     </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Stocks\Entities\PortfolioItem.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\Stocks\Entities\StockCacheItem.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\Stocks\Entities\StockSymbol.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\Stocks\Entities\User.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\Stocks\StockContext.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\Stocks\StockServer.cs">
+      <SubType>Code</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

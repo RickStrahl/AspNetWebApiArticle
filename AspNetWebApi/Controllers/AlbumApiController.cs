@@ -5,8 +5,9 @@ using System.Net.Http;
 using System.Web.Http;
 using MusicAlbums;
 using System.Net.Http.Headers;
+using System.Net;
 
-namespace AspNetWebApi.Controllers.Controllers
+namespace AspNetWebApi.Controllers
 {
     public class AlbumApiController : ApiController
     {
@@ -14,16 +15,41 @@ namespace AspNetWebApi.Controllers.Controllers
         static List<Album> Albums = Album.CreateSampleAlbumData();
 
         
-        public IQueryable<Album> Get()
+        public IEnumerable<Album> GetAlbums()
         {
-            return Albums.OrderBy(alb => alb.Artist).AsQueryable();
+            var albums = Albums.OrderBy(alb => alb.Artist);
+            return albums;
         }
 
-       
-        public Album Get(string id)
-        {
-            var album = Albums.Where(alb => alb.AlbumName.Contains(id)).SingleOrDefault();
+        public Album GetAlbum(string title)
+        {            
+            var album = Albums.Where(alb => alb.AlbumName.Contains(title)).SingleOrDefault();            
             return album;
+        }
+
+        public HttpResponseMessage GetAlbumArt(string title)
+        {
+            var album = GetAlbum(title);
+            if (album == null)
+                return new HttpResponseMessage<ApiMessageError>( 
+                        new ApiMessageError { message = "Album not found"}, 
+                                              HttpStatusCode.NotFound);
+
+            // kinda silly - we would normally serve this directly                     
+            var http = new WebClient();
+            var imageData = http.DownloadData(album.AlbumImageUrl);
+    
+            var result = new HttpResponseMessage();            
+            result.Content = new ByteArrayContent(imageData);
+            result.Content.Headers.ContentType = new MediaTypeHeaderValue("image/jpeg");            
+            
+            return result;
+        }
+        
+
+        public Westwind.StockServer.StockQuote GetAlbum2(string id)
+        {
+            return new Westwind.StockServer.StockQuote();
         }
 
         // POST /api/<controller>
@@ -39,10 +65,10 @@ namespace AspNetWebApi.Controllers.Controllers
             }
 
             // fix up song.AlbumIds
-            foreach (var song in album.Songs)
-            {
-                song.AlbumId = album.Id;
-            }
+            //foreach (var song in album.Songs)
+            //{
+            //    song.AlbumId = album.Id;
+            //}
             Albums.Add(album);
 
             // return a string to show that the value got here
@@ -58,5 +84,11 @@ namespace AspNetWebApi.Controllers.Controllers
         public void Delete(int id)
         {
         }
+    }
+
+    public class ApiMessageError
+    {
+        public string message { get; set; }
+        public bool isCallbackError { get; set; }
     }
 }

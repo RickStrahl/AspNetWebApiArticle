@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <link href="Css/Westwind.css" rel="stylesheet" type="text/css" />
+    <script src="scripts/jquery.min.js" type="text/javascript"></script>
+    <script src="scripts/ww.jquery.min.js" type="text/javascript"></script>
+    <script src="scripts/knockout-2.0.0.js" type="text/javascript"></script>
+    <link href="Css/Westwind.css" rel="stylesheet" type="text/css" />    
+</head>
+<body>
+    <h1>Get Album Data Demo</h1>
+    
+    <div class="containercontent">
+
+    <div id="divAlbumContainer" class="dialog boxshadow" style="width: 500px;" >    
+        <div class="dialog-header">Albums</div>
+        <div data-bind="foreach: albums" style="height: 200px; overflow-y: scroll;">
+            <div class="album" style="height: 70px;padding: 5px; background: khaki; border-bottom: dashed 1px steelblue; display:none">
+                <img data-bind="attr: {src:AlbumImageUrl}" style="width: 70px; float: right; margin-right: 10px;" />
+                <div style="font-weight: bold">
+                    <a href="#" data-bind="text:AlbumName" class="albumlink"></a>
+                </div>
+                <div data-bind="text:Artist" class="smalltext"></div>
+                <div class="smalltext">released: <span data-bind="text: YearReleased"></span></div>            
+            </div>    
+        </div>
+        <div id="divDialogStatus" class="dialog-statusbar">Ready</div>
+    </div>
+
+    <input type="button" id="btnLoadData" value="Load Albums" style="margin-top: 10px;"  />
+
+    </div>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#btnLoadData").click(function () {
+$.getJSON("albums/", function (albums) {
+    // clear out list and make template visible
+    $(".album")
+        .not(":first")
+        .remove()
+        .stop()
+        .show();                    
+
+    // use knockout.js to bind the data    
+    var view = { albums: albums };
+    ko.applyBindings(view);
+
+    $("#divDialogStatus").text(albums.length + " albums");
+});
+            });
+        });
+    </script>
+</body>
+</html>
