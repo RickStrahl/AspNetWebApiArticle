@@ -1,12 +1,6 @@
 ﻿using System;
 using System.Web.Routing;
 using System.Web.Http;
-using System.Linq;
-using System.Data.Entity;
-using System.Data;
-using System.Net.Http.Formatting;
-using System.Net.Http.Headers;
-using MusicAlbums;
 using Westwind.Web.WebApi;
 
 namespace AspNetWebApi
@@ -35,28 +29,53 @@ namespace AspNetWebApi
             //    }
             //);
 
-
-
-RouteTable.Routes.MapHttpRoute(
-    name: "AlbumApiActionImage",
-    routeTemplate: "albums/{title}/image",
-    defaults: new
-    {
-        title = RouteParameter.Optional,
-        controller = "AlbumApi",
-        action = "GetAlbumArt"
-    }
-);
-           RouteTable.Routes.MapHttpRoute(
+            RouteTable.Routes.MapHttpRoute(
                 name: "AlbumApiAction",
-                routeTemplate: "albums/{title}",
+                routeTemplate: "albums/rpc/{action}/{title}",
                 defaults: new
                 {
                     title = RouteParameter.Optional,
                     controller = "AlbumApi",
-                    action = "GetAlbums"
+                    action = "GetAblums"
                 }
             );
+
+
+            RouteTable.Routes.MapHttpRoute(
+                name: "AlbumApiActionImage",
+                routeTemplate: "albums/{title}/image",
+                defaults: new
+                {
+                    title = RouteParameter.Optional,
+                    controller = "AlbumApi",
+                    action = "AlbumArt"
+                }
+            );
+            RouteTable.Routes.MapHttpRoute(
+                 name: "AlbumsVerbs",
+                 routeTemplate: "albums/{title}",
+                 defaults: new
+                 {
+                     title = RouteParameter.Optional,
+                     controller = "AlbumApi"                   
+                 }
+             );
+
+
+
+
+           //RouteTable.Routes.MapHttpRoute(
+           //     name: "GetAlbumApiAction",
+           //     routeTemplate: "albums/{title}",
+           //     defaults: new
+           //     {
+           //         title = RouteParameter.Optional,
+           //         controller = "AlbumApi",
+           //         action = "GetAlbum"
+           //     }
+           // );
+
+
 
 
             RouteTable.Routes.MapHttpRoute(
@@ -79,7 +98,7 @@ RouteTable.Routes.MapHttpRoute(
             // optional
             RegisterApis(GlobalConfiguration.Configuration);
 
-            var formatter = GlobalConfiguration.Configuration.Formatters;
+            
             
         }
 
@@ -97,16 +116,17 @@ RouteTable.Routes.MapHttpRoute(
             foreach (var match in matches)
                 config.Formatters.Remove(match);    
 #endif
-
             // Add JavaScriptSerializer  formatter instead - add at top to make default
             //config.Formatters.Insert(0, new JavaScriptSerializerFormatter());
 
             // Add Json.net formatter - add at the top so it fires first!
             // This leaves the old one in place so JsonValue/JsonObject/JsonArray still are handled
-            //config.Formatters.Insert(0, new JsonNetFormatter());
-            //var formatter = config.Formatters[0];
-            //formatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("text/html"));                        
-           
+            config.Formatters.Insert(0, new JsonNetFormatter());
+
+            // Add an exception filter
+            GlobalConfiguration.Configuration.Filters.Add(new UnhandledExceptionFilter());
+                config.Filters.Add(new UnhandledExceptionFilter());
+            
         }
     }
 }

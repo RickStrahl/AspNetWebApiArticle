@@ -8,59 +8,60 @@
 </head>
 <body>
     
-    <input type="button" id="btnSendAlbum" value="Send" onclick="" />
+    <input type="button" id="btnSendAlbum" value="Send"  />
+    <input type="button" id="btnDeleteAlbum" value="Delete"  />
 
     <script type="text/javascript">
-        var id = new Date().getDate().toString();
-        this.album = {    
-            "Id": id,
-            "AlbumName": "Power Age",
-            "Artist": "AC/DC",
-            "YearReleased": 1977,
-            "Entered": "2002-03-11T18:24:43.5580794-10:00",
-            "AlbumImageUrl": "http://www.amazon.com/gp/product/B00008WT5F/ref=as_li_ss_tl?ie=UTF8&tag=westwindtechn-20&linkCode=as2&camp=1789&creative=390957&creativeASIN=B00008WT5F",
-            "AmazonUrl": "http://www.amazon.com/Powerage-Ac-Dc/dp/B00008WT5F",
-            "Songs": [
-                {
-                    "SongName": "Rock 'n Roll Damnation",
-                },
-                {        
-                    "SongName": "Downpayment Blues"       
-                },
-                {
-                    "SongName": "Riff Raff"
-                }
-            ]
+$("#btnSendAlbum").click(function () {
+    var id = new Date().getTime().toString();
+    var album = {
+        "Id": id,
+        "AlbumName": "Power Age",
+        "Artist": "AC/DC",
+        "YearReleased": 1977,
+        "Entered": "2002-03-11T18:24:43.5580794-10:00",
+        "AlbumImageUrl": "http://ecx.images-amazon.com/images/I/510oasvdvsL._SL500_AA300_.jpg",
+        "AmazonUrl": "http://www.amazon.com/gp/product/B00008WT5E/ref=as_li_ss_tl?ie=UTF8&tag=westwindtechn-20&linkCode=as2&camp=1789&creative=390957&creativeASIN=B00008WT5E",
+        "Songs": [
+        {
+            "SongName": "Rock 'n Roll Damnation"
+        },
+        {
+            "SongName": "Downpayment Blues"
+        },
+        {
+            "SongName": "Riff Raff"
         }
+    ]
+    }
 
-$(document).ready(function () {
-
-    $("#btnSendAlbum").click(function () {
-       
-        $.ajax(
-                        {
-                            url: "albums/",
-                            type: "POST",
-                            contentType: "application/json",
-                            data: JSON.stringify(album),
-                            processData: false,
-                            dataType: "text",
-                            global: false,
-                            beforeSend: function (xhr) {
-                               //xhr.setRequestHeader("Accept","application/json");
-                            },
-                            success: function (result) {
-                                alert(result);
-                            },
-                            error: function (xhr, status, p3, p4) {                                
-                                alert("Error! " + status);
-                            }
-                        });
-
+    $.ajax(
+    {
+        url: "albums/",
+        type: "PUT",
+        contentType: "application/json",
+        data: JSON.stringify(album),
+        processData: false,
+        beforeSend: function (xhr) {
+            // not required since JSON is default output
+            xhr.setRequestHeader("Accept", "application/json");
+        },
+        success: function (result) {
+            alert("Result: " + result);
+        },
+        error: function (xhr, status, p3, p4) {
+            var err = "Error";
+            if (xhr.responseText && xhr.responseText[0] == "{")
+                err = JSON.parse(xhr.responseText).message;
+            alert(err);
+        }
     });
-
-
 });
+
+$("#btnDeleteAlbum").click(function () {
+    
+});
+
     </script>
 </body>
 </html>
