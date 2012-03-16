@@ -3,11 +3,16 @@
 /// <reference path="scripts/knockout-2.0.0.js" />
 /// <reference path="scripts/knockout-mapping.js" />
 
-albumview = null;
-albumsview = null;
-albumEditView = null;
+globals = {    
+    albumView: null,
+    albumsView: null,
+    albumEditView: null,
+    editalbumFirstBind: true,
+}
 
 $(document).ready(function () {
+
+    showStatus({ autoHide: true });
 
     // load albums when page loads
     loadAlbums();
@@ -15,48 +20,23 @@ $(document).ready(function () {
     // reload data from server
     $("#btnLoadData").click(loadAlbums);
 
-    function loadAlbums() {
-        $.getJSON("albums/", function (albums) {
-
-            if (!albumsview) {
-                // first time bind
-                albumsview = ko.mapping.fromJS(albums);
-                var view = { albums: albumsview };
-                ko.applyBindings(view, $("#divAlbumContainer")[0]);
-            }
-            else
-                albumsview = ko.mapping.fromJS(albums, albumsview);
-
-            var view = { albums: albumsview };
-
-            // clear out list and make template visible
-            var $albums = $(".album");
-            //$albums.not(":first").remove();
-            $albums.show();
-
-
-            $("#divDialogStatus").text(albums.length + " albums");
-        });
-    }
-
-
     // Album click handling
     $(".albumlink").live("click", function () {
         var title = $(this).data("id"); // title
         $.getJSON("albums/" + encodeURI(title), function (album) {
             var $dialog = $("#divAlbumDialog");
-            if (!albumview) {
-                albumview = ko.mapping.fromJS(album);
-                ko.applyBindings(albumview, $dialog[0]);
+            if (!globals.albumView) {
+                globals.albumView = ko.mapping.fromJS(album);
+                ko.applyBindings(globals.albumView, $dialog[0]);
                 $dialog.centerInClient();
             }
             else
-                ko.mapping.fromJS(album, albumview);
+                ko.mapping.fromJS(album, globals.albumView);
 
             $dialog
-                        .show()
-                        .closable()
-                        .draggable();
+                .show()
+                .closable()
+                .draggable();
         });
     });
 
@@ -115,43 +95,42 @@ $(document).ready(function () {
                 alert(err);
             }
         });
-
-
     });
 
 
 
-    // show add window
+    // show add new Album Window
     $("#btnAddNewAlbum").click(function () {
         $el = $("#divAddAlbumDialog");
         $el.show()
-                .draggable()
-                .closable();
+            .draggable()
+            .closable()
+            .centerInClient( {centerOnceOnly: true} )
 
-        if (!$el.data("centered")) {
-            $el.centerInClient()
-               .data("centered", true);
-        }
-
-
+        // bind with empty data
         var data = getEmptyAlbum();
 
-
+        // map to ko view model
         if (globals.editalbumFirstBind) {
-            albumEditView = ko.mapping.fromJS(data);
-            //albumEditView.Songs = ko.observableArray(albumEditView.Songs());
+            albumEditView = ko.mapping.fromJS(data);            
             ko.applyBindings(albumEditView, $("#divAddAlbumDialog")[0]);
             globals.editalbumFirstBind = false;
         }
-        else {
-            ko.mapping.fromJS(data, albumEditView);
-        }
-
+        else 
+            ko.mapping.fromJS(data, albumEditView);        
     });
+
 
     $("#btnAddSong").click(function () {
 
-        var song = { SongName: $("#SongName").val(), SongLength: $("#SongLength").val() };
+       var name = $("#SongName").val();
+        if (!name) {
+           showStatus("Must provide a songname",4000);          
+           $("#SongName").focus();
+           return;
+        }
+
+        var song = { SongName: name , SongLength: $("#SongLength").val() };
         albumEditView.Songs.push(song);
 
         $("#SongName").val("").focus();
@@ -201,17 +180,37 @@ $(document).ready(function () {
 
 });
 
-globals = {
-    editalbum: getEmptyAlbum(),
-    editalbumFirstBind: true
+
+
+function loadAlbums() {
+    $.getJSON("albums/", function (albums) {
+        if (!globals.albumsView) {
+            // first time bind
+            globals.albumsView = ko.mapping.fromJS(albums);
+            var view = { albums: globals.albumsView };
+            ko.applyBindings(view, $("#divAlbumContainer")[0]);
+        }
+        else
+            globals.albumsView = ko.mapping.fromJS(albums, globals.albumsView);
+
+        var view = { albums: globals.albumsView };
+
+        // clear out list and make template visible
+        var $albums = $(".album");
+        //$albums.not(":first").remove();
+        $albums.show();
+
+
+        $("#divDialogStatus").text(albums.length + " albums");
+    });
 }
 
 function getEmptyAlbum()  {    
     var obj =
     {
-        AlbumName: "New Album",
-        ArtistName: "Artist",
-        YearReleased: "1900",
+        AlbumName: "",
+        ArtistName: "",
+        YearReleased: 1970,
         AlbumImageUrl: "http://ecx.images-amazon.com/images/I/613yMZ7V32L._SL500_AA300_.jpg",
         AmazonUrl: "",
         Songs: [  ]
@@ -223,8 +222,9 @@ function getEmptyAlbum()  {
 function jqError(xhr, status) {
     var err = "Error";
     if (xhr.responseText &&
-                            xhr.responseText[0] == "{")
+        xhr.responseText[0] == "{")
         err = JSON.parse(xhr.responseText).message;
+    showStatus(err, 4000);
 }
 
 

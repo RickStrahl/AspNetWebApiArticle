@@ -392,12 +392,23 @@ http://en.wikipedia.org/wiki/MIT_License
         /// <returns type="jQuery" />
         var opt = { forceAbsolute: false,
             container: window,    // selector of element to center in
-            completed: null
+            completed: null,
+            centerOnceOnly: false
         };
         $.extend(opt, options);
 
         return this.each(function (i) {
             var el = $(this);
+
+            // if centerOnceOnly is set center only once
+            if (opt.centerOnceOnly) {
+                if (el.data("_centerOnce"))
+                    return;
+                el.data("_centerOnce", true);
+            }
+            else
+                el.data("_centerOnce", null);
+
             var jWin = $(opt.container);
             var isWin = opt.container == window;
 

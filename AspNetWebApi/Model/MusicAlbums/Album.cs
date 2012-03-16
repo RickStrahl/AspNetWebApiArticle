@@ -104,7 +104,7 @@ public class Album
             {
                 Artist = "AC/DC",
                 AlbumName = "Dirty Deeds Done Dirt Cheap",
-                YearReleased = 2007,
+                YearReleased = 1977,
                 AlbumImageUrl = "http://ecx.images-amazon.com/images/I/61kTaH-uZBL._AA115_.jpg",
                 AmazonUrl = "http://www.amazon.com/gp/product/B00008BXJ4/ref=as_li_ss_tl?ie=UTF8&tag=westwindtechn-20&linkCode=as2&camp=1789&creative=390957&creativeASIN=B00008BXJ4"
             };
