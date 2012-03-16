@@ -40,8 +40,8 @@ public void ThrowError()
     }
     catch(Exception ex)
     {
-        ///ThrowSafeException(ex.Message);
-        throw new InvalidOperationException("Bogus excpetion fired");
+        ThrowSafeException(ex.Message);
+        ///throw new InvalidOperationException("Bogus excpetion fired");
     }
 }
 
@@ -133,6 +133,13 @@ private void ThrowSafeException(string message,
             Albums.Remove(matchedAlbum);
 
             return new HttpResponseMessage(HttpStatusCode.NoContent);
+        }
+
+
+        public HttpResponseMessage ResetAlbumData()
+        {
+            Albums = Album.CreateSampleAlbumData();
+            return new HttpResponseMessage(HttpStatusCode.OK);
         }
     }
 

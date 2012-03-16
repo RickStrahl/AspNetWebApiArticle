@@ -19,10 +19,25 @@
     {
         opacity: 1;        
     }
+    .fielditem
+    {
+        margin-top: 10px;        
+    }
+    .fielditem input[type=text]
+    {
+        width: 350px;
+    }
     </style> 
 </head>
 <body>
     <h1>Get Album Data Demo</h1>
+    <div class="toolbarcontainer">
+      <a href="#" id="btnLoadData" class="hoverbutton">Load Albums</a>
+      <a href="#" id="btnSendAlbum" class="hoverbutton">Add new Album</a>
+      <a href="#" id="btnAddNewAlbum" class="hoverbutton">Add new Album</a>
+      <a href="#" id="btnReloadAlbums" class="hoverbutton">Reset Albums</a>
+  
+    </div>
     
     <div class="containercontent">
 
@@ -42,29 +57,86 @@
         <div id="divDialogStatus" class="dialog-statusbar">Ready</div>
     </div>
 
-  <input type="button" id="btnLoadData" value="Load Albums" style="margin-top: 10px;"  />
-  <input type="button" id="btnSendAlbum" value="Add Album" />
+
 
     <div id="divAlbumDialog" class="dialog boxshadow" style="width: 400px; display: none;" >
         
         <div class="dialog-header">Album Detail</div>
-        <div class="dialog-content gridhighlight">                        
-            <img src="" data-bind="attr: { src: AlbumImageUrl }" style="height: 100px;float: right; margin: 10px;" />
+        <div class="dialog-content gridhighlight">                          
+            <img data-bind="if:AlbumImageUrl,attr: { src: AlbumImageUrl }" 
+                 style="height: 100px;float: right; margin: 10px;" />
             <h3 class="album-name" data-bind="text: AlbumName"></h3>        
             <div class="smalltext" data-bind="text: 'realeased in: ' + YearReleased()"></div>
-            <div class="smalltext"><a href="" data-bind="attr:{href:AmazonUrl}" target="_blank">Buy on Amazon</a></div>
+            <div class="smalltext"><a href="" data-bind="attr:{href:AmazonUrl},if:AmazonUrl" target="_blank">Buy on Amazon</a></div>
             <div class="clearfix"></div>
             <div data-bind="foreach: Songs" style="padding: 10px;" class="songcontainer" >
                 <div class="albumsong smalltext" style="padding: 5px; border-bottom: 1px dashed Steelblue">
                     <div data-bind="text: SongLength" style="float:right"></div>
-                    <div data-bind="text: SongName "></div>                
+                    <div data-bind="text: SongName"></div>                
                 </div>
             </div>
 
         </div>        
     </div>
 
-    
+
+
+    <div id="divAddAlbumDialog" class="dialog boxshadow" style="width: 400px;display:none;" >        
+        <div class="dialog-header">Add Album</div>
+        <div class="dialog-content gridhighlight">                                    
+            <div class="fielditem">
+                <div class="label">Album Name:</div>
+                <input type="text" name="AlbumName" id="AlbumName" data-bind="value: AlbumName" placeholder="Add an album name" />
+            </div>
+            <div class="fielditem">
+                <div class="label">Artist:</div>
+                <input type="text" name="ArtistName" id="ArtistName" data-bind="value: ArtistName" placeholder="Add an Artist Name" />
+            </div>
+
+            <div class="fielditem">
+                <div class="label">Year released:</div>
+                <input type="text" id="YearReleased" data-bind="value: YearReleased" placeholder="Add a year" />
+            </div>
+
+            <div class="fielditem">
+                <div class="label">Album Image:</div>
+                <input type="text" id="AlbumImageUrl" data-bind="value: AlbumImageUrl" placeholder="Add url to an image for album" />
+            </div>
+
+            <div class="fielditem">
+                <div class="label">Amazon Url:</div>
+                <input type="text" id="AmazonUrl" data-bind="value: AmazonUrl" placeholder="Enter an Amazon Buy Link" />
+            </div>
+
+            <div style="rightalign" style="width: 400px;">
+                <div class="clearfix"></div>
+                <div data-bind="foreach: Songs" style="padding: 10px;" class="songcontainer" >
+                    <div class="albumsong smalltext" style="padding: 5px; border-bottom: 1px dashed Steelblue">
+                        <div data-bind="text: SongLength" style="float:right"></div>
+                        <div data-bind="text: SongName "></div>                
+                    </div>
+                </div>
+                <hr />
+
+
+                <fieldset>
+                    <legend>Add Song</legend>
+                    <div>
+                    
+                        <label>Name:</label>
+                        <input type="text" id="SongName" placeholder="Enter a song name" style="width: 100px;" />
+
+                        <label>Length:</label>
+                        <input type="text" id="SongLength" placeholder="Enter a song length"  style="width: 50px"/>
+                        <input type="button" id="btnAddSong" value="Add" />
+                    </div>                
+                </fieldset>
+            </div>
+
+            <input type="button" id="btnSaveAlbum" value="Save Album" class="bigbutton" />
+        </div>        
+    </div>
+
 
     </div>
     <script type="text/javascript">

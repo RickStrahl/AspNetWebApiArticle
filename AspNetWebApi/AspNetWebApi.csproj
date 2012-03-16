@@ -80,21 +80,13 @@
   <ItemGroup>
     <Content Include="bin\AspNetWebApi.dll" />
     <Content Include="bin\Newtonsoft.Json.dll" />
-    <Content Include="bin\Newtonsoft.Json.xml" />
     <Content Include="bin\System.Json.dll" />
-    <Content Include="bin\System.Json.xml" />
     <Content Include="bin\System.Net.Http.dll" />
     <Content Include="bin\System.Net.Http.Formatting.dll" />
-    <Content Include="bin\System.Net.Http.Formatting.xml" />
     <Content Include="bin\System.Net.Http.WebRequest.dll" />
-    <Content Include="bin\System.Net.Http.WebRequest.xml" />
-    <Content Include="bin\System.Net.Http.xml" />
     <Content Include="bin\System.Web.Http.Common.dll" />
-    <Content Include="bin\System.Web.Http.Common.xml" />
     <Content Include="bin\System.Web.Http.dll" />
     <Content Include="bin\System.Web.Http.WebHost.dll" />
-    <Content Include="bin\System.Web.Http.WebHost.xml" />
-    <Content Include="bin\System.Web.Http.xml" />
     <Content Include="Css\Images\close.gif" />
     <Content Include="Css\Images\DialogHeader.png" />
     <Content Include="Css\Images\DialogHighlight.png" />
@@ -125,7 +117,7 @@
     <Content Include="Css\Images\users.gif" />
     <Content Include="Css\Images\warning.gif" />
     <Content Include="Css\Westwind.css" />
-    <Content Include="default.aspx" />
+    <Content Include="default.htm" />
     <Content Include="GetAlbums.htm" />
     <Content Include="GetAlbums.js" />
     <Content Include="Global.asax" />
@@ -151,13 +143,6 @@
     <Compile Include="Code\WebApi\Formatters\JsonNetFormatter.cs" />
     <Compile Include="Controllers\AlbumApiController.cs" />
     <Compile Include="Model\MusicAlbums\Album.cs" />
-    <Compile Include="default.aspx.cs">
-      <DependentUpon>default.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="default.aspx.designer.cs">
-      <DependentUpon>default.aspx</DependentUpon>
-    </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
