@@ -1,36 +1,38 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Http.Filters;
-using System.Net.Http;
 using AspNetWebApi.Controllers;
 using System.Net;
 
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Net.Http.Formatting;
+using System.Web.Http;
+
+#if true
 namespace AspNetWebApi
 {
-public class UnhandledExceptionFilter : ExceptionFilterAttribute
-{
-    public override void OnException(HttpActionExecutedContext
-                                     context)
-    {      
-        HttpStatusCode status = HttpStatusCode.InternalServerError;
+    public class UnhandledExceptionFilter : ExceptionFilterAttribute
+    {
+        public override void OnException(HttpActionExecutedContext
+                                         context)
+        {
+            HttpStatusCode status = HttpStatusCode.InternalServerError;
 
-        var exType = context.Exception.GetType();
+            var exType = context.Exception.GetType();
 
-        if (exType == typeof(UnauthorizedAccessException))
-            status = HttpStatusCode.Unauthorized;
-        else if (exType == typeof(ArgumentException))
-            status = HttpStatusCode.NotFound;
+            if (exType == typeof(UnauthorizedAccessException))
+                status = HttpStatusCode.Unauthorized;
+            else if (exType == typeof(ArgumentException))
+                status = HttpStatusCode.NotFound;
 
-        var apiError = new ApiMessageError() 
-        { message = context.Exception.Message };
+            var apiError = new ApiMessageError() { message = context.Exception.Message };
 
-        var errMsg = new HttpResponseMessage<ApiMessageError>(apiError,
-                                                              status);
 
-        context.Result = errMsg;
-        base.OnException(context);
+            var errMsg = context.Request.CreateResponse<ApiMessageError>(status,apiError);                                                                         
+
+            context.Result = errMsg;
+            base.OnException(context);
+        }
     }
 }
-}
+#endif

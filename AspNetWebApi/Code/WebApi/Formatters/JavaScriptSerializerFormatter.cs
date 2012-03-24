@@ -5,6 +5,7 @@ using System.Web.Script.Serialization;
 using System.Json;
 using System.IO;
 using System.Collections.Generic;
+using System.Net.Http.Headers;
 
 namespace Westwind.Web.WebApi
 {
@@ -15,7 +16,7 @@ namespace Westwind.Web.WebApi
             SupportedMediaTypes.Add(new System.Net.Http.Headers.MediaTypeHeaderValue("application/json"));
         }
 
-        protected override bool CanWriteType(Type type)
+        public override bool CanWriteType(Type type)
         {
             // don't serialize JsonValue structure use default for that
             if (type == typeof(JsonValue) || type == typeof(JsonObject) || type== typeof(JsonArray) )
@@ -26,7 +27,7 @@ namespace Westwind.Web.WebApi
             return true;
         }
 
-        protected override bool CanReadType(Type type)
+        public override bool CanReadType(Type type)
         {
             if (type == typeof(IKeyValueModel))                
                 return false;
@@ -34,10 +35,12 @@ namespace Westwind.Web.WebApi
             return true;
         }
 
-        protected override System.Threading.Tasks.Task<object> OnReadFromStreamAsync(Type type, System.IO.Stream stream, System.Net.Http.Headers.HttpContentHeaders contentHeaders, FormatterContext formatterContext)
+        public override System.Threading.Tasks.Task<object> ReadFromStreamAsync(Type type, System.IO.Stream stream, 
+                                                                                   HttpContentHeaders contentHeaders, 
+                                                                                   IFormatterLogger formatterLogger)
         {
             var task = Task<object>.Factory.StartNew(() =>
-                {                    
+                {                                                            
                     var ser = new JavaScriptSerializer();                    
 
                     string json;
@@ -54,7 +57,11 @@ namespace Westwind.Web.WebApi
             return task;
         }
 
-        protected override System.Threading.Tasks.Task OnWriteToStreamAsync(Type type, object value, System.IO.Stream stream, System.Net.Http.Headers.HttpContentHeaders contentHeaders, FormatterContext formatterContext, System.Net.TransportContext transportContext)
+
+        public override System.Threading.Tasks.Task WriteToStreamAsync(Type type, object value, 
+                                                                          System.IO.Stream stream, 
+                                                                          HttpContentHeaders contentHeaders,                                                                           
+                                                                          System.Net.TransportContext transportContext)
         {            
             var task = Task.Factory.StartNew( () =>
                 {
