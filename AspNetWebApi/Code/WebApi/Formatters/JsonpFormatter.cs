@@ -65,8 +65,7 @@ namespace Westwind.Web.WebApi
         public override Task WriteToStreamAsync(Type type, object value, Stream stream,
                                                      HttpContentHeaders contentHeaders,
                                                     TransportContext transportContext)
-        {
-         
+        {         
                             
             if (!string.IsNullOrEmpty(JsonpCallbackFunction))
             {
@@ -102,7 +101,7 @@ namespace Westwind.Web.WebApi
             var query = HttpUtility.ParseQueryString(request.RequestUri.Query);
             var queryVal = query[this.JsonpParameterName];
 
-            if (string.IsNullOrEmpty(queryVal) == null)
+            if (string.IsNullOrEmpty(queryVal))
                 return null;
 
             return queryVal;
