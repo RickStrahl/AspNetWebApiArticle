@@ -29,9 +29,6 @@ namespace Westwind.Web.WebApi
 
         public override bool CanReadType(Type type)
         {
-            if (type == typeof(IKeyValueModel))                
-                return false;
-            
             return true;
         }
 

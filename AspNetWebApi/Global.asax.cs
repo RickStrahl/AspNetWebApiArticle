@@ -8,37 +8,29 @@ namespace AspNetWebApi
     public class Global : System.Web.HttpApplication
     {
         protected void Application_Start(object sender, EventArgs e)
-        {       
-
-            //// Http Verb based routing (use for resources whenever possible)
-            //RouteTable.Routes.MapHttpRoute(
-            //    name: "StockApiVerbs",
-            //    routeTemplate: "stocks/{symbol}",
-            //    defaults: new { symbol = RouteParameter.Optional,
-            //                    controller = "StockApi" }
-            //);
-
-            // Action based routing (used for RPC calls)
-            //RouteTable.Routes.MapHttpRoute(
-            //    name: "StockApi",
-            //    routeTemplate: "stocks/{action}/{symbol}",
-            //    defaults: new
-            //    {
-            //        symbol = RouteParameter.Optional,
-            //        controller = "StockApi"
-            //    }
-            //);
+        {
 
             RouteTable.Routes.MapHttpRoute(
-                name: "AlbumApiAction",
+                name: "AlbumRpcApiAction",
                 routeTemplate: "albums/rpc/{action}/{title}",
                 defaults: new
                 {
                     title = RouteParameter.Optional,
-                    controller = "AlbumApi",
+                    controller = "AlbumRpcApi",
                     action = "GetAblums"
                 }
             );
+
+            RouteTable.Routes.MapHttpRoute(
+                name: "SamplesApiAction",
+                routeTemplate: "samples/{action}/{title}",
+                defaults: new
+                {
+                    title = RouteParameter.Optional,
+                    controller = "SamplesApi"                    
+                }
+            );
+            
 
 
             RouteTable.Routes.MapHttpRoute(
@@ -47,59 +39,29 @@ namespace AspNetWebApi
                 defaults: new
                 {
                     title = RouteParameter.Optional,
-                    controller = "AlbumApi",
+                    controller = "AlbumRpcApi",
                     action = "AlbumArt"
                 }
             );
+
+
+            // Verb Routing 
             RouteTable.Routes.MapHttpRoute(
-                 name: "AlbumsVerbs",
-                 routeTemplate: "albums/{title}",
-                 defaults: new
-                 {
-                     title = RouteParameter.Optional,
-                     controller = "AlbumApi"                   
-                 }
-             );
+                    name: "AlbumsVerbs",
+                    routeTemplate: "albums/{title}",
+                    defaults: new
+                    {
+                        title = RouteParameter.Optional,
+                        controller = "AlbumApi"                   
+                    }
+                );
 
 
 
-
-           //RouteTable.Routes.MapHttpRoute(
-           //     name: "GetAlbumApiAction",
-           //     routeTemplate: "albums/{title}",
-           //     defaults: new
-           //     {
-           //         title = RouteParameter.Optional,
-           //         controller = "AlbumApi",
-           //         action = "GetAlbum"
-           //     }
-           // );
-
-
-
-
-            RouteTable.Routes.MapHttpRoute(
-                name: "StockProfileApi",
-                routeTemplate: "stocks/{action}/{symbol}",
-                defaults: new
-                {
-                    symbol = RouteParameter.Optional,
-                    controller = "StockApi"
-                }
-            );
-
-          
-
-            // create/update database on changes
-            //Database.SetInitializer<StockContext>(new StockContextInitializer());
-            //Database.SetInitializer<AlbumContext>(new AlbumContextDbInitializer());
 
             // WebApi Configuration to hook up formatters and message handlers
             // optional
             RegisterApis(GlobalConfiguration.Configuration);
-
-            
-            
         }
 
         public static void RegisterApis(HttpConfiguration config)
@@ -122,11 +84,12 @@ namespace AspNetWebApi
             // Add Json.net formatter - add at the top so it fires first!
             // This leaves the old one in place so JsonValue/JsonObject/JsonArray still are handled
             //config.Formatters.Insert(0, new JsonNetFormatter());
-            //config.Formatters.Insert(0, new Westwind.Web.WebApi.JsonpFormatter());
+            
+            config.Formatters.Insert(0, new Westwind.Web.WebApi.JsonpFormatter());
 
             // Add an exception filter
             //GlobalConfiguration.Configuration.Filters.Add(new UnhandledExceptionFilter());
-            //    config.Filters.Add(new UnhandledExceptionFilter());
+            config.Filters.Add(new UnhandledExceptionFilter());
 
             
         }
