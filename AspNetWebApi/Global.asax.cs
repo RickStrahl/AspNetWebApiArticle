@@ -57,7 +57,9 @@ namespace AspNetWebApi
                 );
 
 
-
+            GlobalConfiguration
+                   .Configuration
+                   .IncludeErrorDetailPolicy = IncludeErrorDetailPolicy.LocalOnly;
 
             // WebApi Configuration to hook up formatters and message handlers
             // optional
