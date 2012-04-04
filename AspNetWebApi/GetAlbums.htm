@@ -27,13 +27,19 @@
     {
         width: 300px;
     }
+    .album-artist
+    {
+        color: Brown;       
+        font-weight: bold;
+        margin: 5px 0;
+    }
     </style> 
 </head>
 <body>
     <h1>Get Album Data Demo</h1>
     <div class="toolbarcontainer">
       <a href="#" id="btnLoadData" class="hoverbutton">Load Albums</a>
-      <a href="#" id="btnSendAlbum" class="hoverbutton">Add new Album</a>
+      <a href="#" id="btnSendAlbum" class="hoverbutton">Add PowerAge Album</a>
       <a href="#" id="btnAddNewAlbum" class="hoverbutton">Add new Album</a>
       <a href="#" id="btnReloadAlbums" class="hoverbutton">Reset Albums</a>
   
@@ -61,13 +67,14 @@
 
 
 
-    <div id="divAlbumDialog" class="dialog boxshadow" style="width: 400px; display: none;" >
+    <div id="divAlbumDialog" class="dialog boxshadow" style="width: 450px; display: none;" >
         
         <div class="dialog-header">Album Detail</div>
         <div class="dialog-content gridhighlight">                          
             <img data-bind="if:AlbumImageUrl,attr: { src: AlbumImageUrl }" 
                  style="height: 100px;float: right; margin: 10px;" />
-            <h3 class="album-name" data-bind="text: AlbumName"></h3>        
+            <h3 class="album-name" data-bind="text: AlbumName"></h3> 
+            <div class="album-artist" data-bind="text: Artist"></div>       
             <div class="smalltext" data-bind="text: 'realeased in: ' + YearReleased()"></div>
             <div class="smalltext"><a href="" data-bind="attr:{href:AmazonUrl},if:AmazonUrl" target="_blank">Buy on Amazon</a></div>
             <div class="clearfix"></div>
@@ -91,7 +98,7 @@
 
         <div class="rightalign" style="width: 370px;">
                
-                        <fieldset>
+                <fieldset>
                     <legend>Add Song</legend>
                     <div>                    
                         <label>Name:</label>
@@ -117,7 +124,7 @@
             </div>
             <div class="fielditem">
                 <div class="label">Artist:</div>
-                <input type="text" name="ArtistName" id="ArtistName" data-bind="value: ArtistName" placeholder="Add an Artist Name" />
+                <input type="text" name="ArtistName" id="ArtistName" data-bind="value: Artist" placeholder="Add an Artist Name" />
             </div>
 
             <div class="fielditem">
