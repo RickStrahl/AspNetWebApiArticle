@@ -4,9 +4,13 @@
 /// <reference path="scripts/knockout-mapping.js" />
 
 globals = {    
+    // display view for a single album instance
     albumView: null,
+    // display view for a album array
     albumsView: null,
+    // view for editing an album
     albumEditView: null,
+    // flag that determines whether we're on the first bind
     editalbumFirstBind: true,
 }
 
@@ -209,7 +213,7 @@ function getEmptyAlbum()  {
     var obj =
     {
         AlbumName: "",
-        ArtistName: "",
+        Artist: "",
         YearReleased: 1970,
         AlbumImageUrl: "http://ecx.images-amazon.com/images/I/613yMZ7V32L._SL500_AA300_.jpg",
         AmazonUrl: "",
