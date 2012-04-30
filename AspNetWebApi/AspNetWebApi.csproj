@@ -114,6 +114,7 @@
     <Content Include="GetAlbums.htm" />
     <Content Include="GetAlbums.js" />
     <Content Include="Global.asax" />
+    <Content Include="HttpClient_Requests.aspx" />
     <Content Include="scripts\knockout-mapping.js" />
     <Content Include="scripts\jquery-vsdoc.js" />
     <Content Include="scripts\jquery.js" />
@@ -141,6 +142,13 @@
     <Compile Include="Controllers\AlbumRpcApiController.cs" />
     <Compile Include="Code\WebApi\Filters\ApiMessageError.cs" />
     <Compile Include="Controllers\SamplesApiController.cs" />
+    <Compile Include="HttpClient_Requests.aspx.cs">
+      <DependentUpon>HttpClient_Requests.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="HttpClient_Requests.aspx.designer.cs">
+      <DependentUpon>HttpClient_Requests.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Model\MusicAlbums\Album.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
