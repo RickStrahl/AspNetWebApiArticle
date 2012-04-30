@@ -38,8 +38,7 @@ namespace MusicAlbums
             album.AddSong("What do you do", "7:25");
             album.AddSong("Blues Jam", "11:49");
             album.AddSong("Another Life", "4:53");
-            album.AddSong("Just like You", "10:59");
-
+            album.AddSong("Just like You", "10:59");            
 
             album = new Album()
             {

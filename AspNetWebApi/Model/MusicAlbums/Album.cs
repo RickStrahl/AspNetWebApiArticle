@@ -12,8 +12,9 @@ public class Song
     public string AlbumId { get; set; }
     [Required,StringLength(80)]
     public string SongName { get; set; }
-    [StringLength(5)]        
+    [StringLength(5)]
     public string SongLength { get; set; }
+
 }
 
 public class Album

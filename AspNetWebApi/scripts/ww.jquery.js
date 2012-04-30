@@ -1,7 +1,7 @@
 ﻿/// <reference path="jquery.js" />
 /*
 ww.jQuery.js  
-Version 1.01 - 2/10/2012
+Version 1.06 - 4/18/2012
 West Wind jQuery plug-ins and utilities
 
 (c) 2008-2011 Rick Strahl, West Wind Technologies 
@@ -445,6 +445,53 @@ http://en.wikipedia.org/wiki/MIT_License
                 opt.completed(this);
         });
     }
+
+    // sums up CSS property values
+    function sumDimensions($el, dims) {
+        // Opera returns -1 for missing min/max width, turn into 0
+        var sum = 0;
+        for (var i = 1; i < arguments.length; i++)
+            sum += Math.max(parseInt($el.css(arguments[i]), 10) || 0, 0);
+        return sum;
+    }
+
+    $.fn.stretchToBottom = function (options) {
+        var opt = {
+            container: $(window),
+            bottomOffset: 0
+        }
+        if (options && options.length)
+            opt.container = options;
+        else
+            $.extend(opt, options);
+
+        return this.each(function () {
+            $el = $(this);
+            var oabs = $el.css("position");
+            $el.makeAbsolute();
+            var $cont = opt.container;
+
+            var bott = $(window).innerHeight();
+            var top = parseInt($el.css("top"));
+            var height = 0;
+            if (opt.container[0] != window) {
+                var ds = sumDimensions($cont, "borderTopWidth", "borderBottomWidth", "marginBottom", "paddingBottom", "paddingTop") +
+                         sumDimensions($el, "borderTopWidth", "borderBottomWidth", "marginBottom", "marginTop");
+                ds = ds ? ds : 1;
+                bott = $cont.offset().top + $cont.innerHeight();
+                height = Math.floor(bott - top - Math.ceil(ds) - opt.bottomOffset);
+                //console.log("*id: " + this.id + "  bott: " + bott + " Top: " + top + " ds: " + ds + "  offset: " + opt.bottomOffset + " height: " + height);
+            }
+            else {
+                var ds = sumDimensions($el, "borderTopWidth", "borderBottomWidth", "marginBottom", "marginTop");
+                height = bott - top - Math.ceil(ds) - opt.bottomOffset;
+                //console.log("id: " + this.id + "  bott: " + bott + " Top: " + top + " ds: " + ds + "  offset: " + opt.bottomOffset + " height: " + height);
+            }
+
+            $el.css("position", oabs).css("height", height);
+        });
+    };
+
 
     $.fn.moveToMousePosition = function (evt, options) {
         var opt = { left: 0, top: 0 };
@@ -1161,12 +1208,12 @@ http://en.wikipedia.org/wiki/MIT_License
     $.modalDialog = function (msg, header, aButtons, handler, isHtml) {
         var dl = $("#_MBOX");
         if (dl.length < 1) {
-            dl = $("<div>").addClass("blackborder dragwindow").attr("id", "_MBOX").css({ width: 400 });
-            var head = $("<div>").addClass("gridheader").attr("id", "_MBOXHEADER");
-            var ctn = $("<div>").addClass("containercontent").attr("id", "_MBOXCONTENT");
+            dl = $("<div>").addClass("dialog dragwindow").attr("id", "_MBOX").css({ width: 400 });
+            var head = $("<div>").addClass("dialog-header").attr("id", "_MBOXHEADER");
+            var ctn = $("<div>").addClass("dialog-content").attr("id", "_MBOXCONTENT");
 
             dl.append(head).append(ctn);
-            var btns = $("<div>").css("margin", "5px 15px");
+            var btns = $("<div>").css("margin", "0px 15px 15px");
             if (!aButtons)
                 aButtons = [" Close "];
             for (var i = 0; i < aButtons.length; i++) {
@@ -1178,8 +1225,14 @@ http://en.wikipedia.org/wiki/MIT_License
         if (!handler) handler = function () { if (this.id.substr(0, 5) == "_BTN_" || $(this).hasClass("closebox")) return true; return false; };
         dl.modalDialog({ dialogHandler: handler, headerId: "_MBOXHEADER", contentId: "_MBOXCONTENT" },
                    msg, header, isHtml)
-          .draggable().shadow()
-          .closable({ closeHandler: handler || function () { dl.modalDialog("hide"); } });
+          .draggable({ handle: $("#_MBOX .dialog-header") }).shadow()
+          .closable({ closeHandler:
+              function () {
+                  var close = true;
+                  if (handler) close = handler.call(this);
+                  if (close) $("#_MBOX").modalDialog("hide");
+              }
+          });
     }
     opaqueOverlay = function (opt, p2) {
         var _I = this;
@@ -1370,7 +1423,7 @@ http://en.wikipedia.org/wiki/MIT_License
             if (!pos || pos == "static")
                 el.css("position", "relative");
             var h = opt.handle ? $(opt.handle).css({ position: "relative" }) : el;
-            
+
             var div = el.find("." + opt.cssClass);
             var exists = true;
             if (div.length < 1) {
@@ -1389,7 +1442,7 @@ http://en.wikipedia.org/wiki/MIT_License
             if (opt.imageUrl) div.css("background-image", "none");
 
             if (!exists)
-                h.append(div);            
+                h.append(div);
         });
     }
 

@@ -4,11 +4,11 @@ using System;
 using System.Net.Http.Formatting;
 using System.Threading.Tasks;
 using System.Web.Script.Serialization;
-using System.Json;
 using Newtonsoft.Json;
 using System.IO;
 using Newtonsoft.Json.Converters;
 using System.Net.Http.Headers;
+using Newtonsoft.Json.Linq;
 
 namespace Westwind.Web.WebApi
 {
@@ -22,7 +22,7 @@ namespace Westwind.Web.WebApi
         public override bool CanWriteType(Type type)
         {
             // don't serialize JsonValue structure use default for that
-            if (type == typeof(JsonValue) || type == typeof(JsonObject) || type == typeof(JsonArray))
+            if (type == typeof(JValue) || type == typeof(JObject) || type == typeof(JArray))
                 return false;
 
             return true;

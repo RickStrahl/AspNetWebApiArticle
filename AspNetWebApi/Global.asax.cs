@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Web.Routing;
 using System.Web.Http;
+using System.Globalization;
 //using Westwind.Web.WebApi;
 
 namespace AspNetWebApi
@@ -9,6 +10,7 @@ namespace AspNetWebApi
     {
         protected void Application_Start(object sender, EventArgs e)
         {
+            
 
             RouteTable.Routes.MapHttpRoute(
                 name: "AlbumRpcApiAction",
@@ -44,7 +46,7 @@ namespace AspNetWebApi
                 }
             );
 
-
+            
             // Verb Routing 
             RouteTable.Routes.MapHttpRoute(
                     name: "AlbumsVerbs",
@@ -56,6 +58,8 @@ namespace AspNetWebApi
                     }
                 );
 
+            var conf = new HttpConfiguration();
+            
 
             GlobalConfiguration
                    .Configuration
@@ -86,14 +90,15 @@ namespace AspNetWebApi
             // Add Json.net formatter - add at the top so it fires first!
             // This leaves the old one in place so JsonValue/JsonObject/JsonArray still are handled
             //config.Formatters.Insert(0, new JsonNetFormatter());
-            
+
             config.Formatters.Insert(0, new Westwind.Web.WebApi.JsonpFormatter());
 
             // Add an exception filter
             //GlobalConfiguration.Configuration.Filters.Add(new UnhandledExceptionFilter());
             config.Filters.Add(new UnhandledExceptionFilter());
 
-            
+
         }
+        
     }
 }
