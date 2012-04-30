@@ -102,9 +102,10 @@ namespace AspNetWebApi.Controllers
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        [HttpPost]
+        [HttpPost,HttpGet]
         public string JsonValue(JObject value)
         {            
+            // Dynamically parse json object
             dynamic dval = value;
             
             string val = dval.Id;
@@ -114,6 +115,8 @@ namespace AspNetWebApi.Controllers
                 Id = dval.Id,
                 Entered = dval.Entered
             };
+
+
 
             return album.Id + " " + album.Entered.ToString("d"); 
         }
