@@ -71,7 +71,6 @@
     <Reference Include="System.Configuration" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="bin\AspNetWebApi.dll" />
     <Content Include="bin\Newtonsoft.Json.dll" />
     <Content Include="bin\System.Json.dll" />
     <Content Include="bin\System.Net.Http.dll" />
