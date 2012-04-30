@@ -6,6 +6,7 @@ using System.Web.Http;
 using MusicAlbums;
 using System.Net;
 using System.Xml;
+using Newtonsoft.Json.Linq;
 
 namespace AspNetWebApi.Controllers
 {
@@ -94,6 +95,27 @@ namespace AspNetWebApi.Controllers
             var doc = new XmlDocument();
             doc.Load(request.Content.ReadAsStreamAsync().Result);
             return doc.DocumentElement.OuterXml;
+        }
+
+        /// <summary>
+        /// Pass in an arbitrary object and parse
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public string JsonValue(JObject value)
+        {            
+            dynamic dval = value;
+            
+            string val = dval.Id;
+
+            Album album = new Album()
+            {
+                Id = dval.Id,
+                Entered = dval.Entered
+            };
+
+            return album.Id + " " + album.Entered.ToString("d"); 
         }
 
     }

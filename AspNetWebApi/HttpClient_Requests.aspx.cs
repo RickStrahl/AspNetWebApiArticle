@@ -32,11 +32,18 @@ namespace AspNetWebApi
             //                                                     new XmlMediaTypeFormatter() );
 
             //var content = new Content
-var client = new HttpClient();
-var album = new Album() { AlbumName = "PowerAge", Artist = "AC/DC" };
-var result = client.PostAsync<Album>("http://localhost/AspNetWebApi/samples/ReturnXmlDocument",
-                                        album, new XmlMediaTypeFormatter())
-                    .Result;
+
+            var client = new HttpClient();
+            var album = new Album() { AlbumName = "PowerAge", Artist = "AC/DC", Entered = DateTime.Now.AddDays(-10) };
+
+            //var result = client.PostAsync<Album>("http://localhost/AspNetWebApi/samples/ReturnXmlDocument",
+            //                                        album, new XmlMediaTypeFormatter())
+            //                    .Result;
+
+            var result = client.PostAsync<Album>("http://localhost/AspNetWebApi/samples/JsonValue",
+                                                    album, new JsonMediaTypeFormatter())
+                                .Result;
+
 
             //var result = client.PostAsync("http://rasxps/AspNetWebApi/albums/rpc/ReturnFormVariableString", content).Result;
             //var result = client.PostAsync("http://rasxps/AspNetWebApi/albums/rpc/ReturnString", content).Result;
