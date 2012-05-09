@@ -66,13 +66,6 @@
     <Reference Include="System.Configuration" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="bin\Newtonsoft.Json.dll" />
-    <Content Include="bin\System.Json.dll" />
-    <Content Include="bin\System.Net.Http.dll" />
-    <Content Include="bin\System.Net.Http.Formatting.dll" />
-    <Content Include="bin\System.Net.Http.WebRequest.dll" />
-    <Content Include="bin\System.Web.Http.dll" />
-    <Content Include="bin\System.Web.Http.WebHost.dll" />
     <Content Include="Css\Images\close.gif" />
     <Content Include="Css\Images\DialogHeader.png" />
     <Content Include="Css\Images\DialogHighlight.png" />
@@ -153,6 +146,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="bin\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

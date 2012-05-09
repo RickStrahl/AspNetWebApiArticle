@@ -20,7 +20,7 @@ $(document).ready(function () {
     showStatus({ autoHide: true });
 
     page.resizeFrame();
-    $(window).resize(page.resizeFrame);
+    setTimeout(function () { $(window).resize(page.resizeFrame) }, 30);
 
     // load albums when page loads
     page.loadAlbums(true);
