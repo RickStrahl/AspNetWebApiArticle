@@ -6,6 +6,8 @@ using System.IO;
 using System.Collections.Generic;
 using System.Net.Http.Headers;
 using Newtonsoft.Json.Linq;
+using System.Net.Http;
+using System.Net;
 
 namespace Westwind.Web.WebApi
 {
@@ -30,9 +32,9 @@ namespace Westwind.Web.WebApi
             return true;
         }
 
-        public override System.Threading.Tasks.Task<object> ReadFromStreamAsync(Type type, System.IO.Stream stream, 
-                                                                                   HttpContentHeaders contentHeaders, 
-                                                                                   IFormatterLogger formatterLogger)
+        public override Task<object> ReadFromStreamAsync(Type type, Stream readStream, 
+                                                         HttpContent content, 
+                                                         IFormatterLogger formatterLogger)
         {
             var task = Task<object>.Factory.StartNew(() =>
                 {                                                            
@@ -40,7 +42,7 @@ namespace Westwind.Web.WebApi
 
                     string json;
 
-                    using (var sr = new StreamReader(stream))
+                    using (var sr = new StreamReader(readStream))
                     {                        
                         json = sr.ReadToEnd();                        
                     }
@@ -51,12 +53,11 @@ namespace Westwind.Web.WebApi
 
             return task;
         }
-
-
+        
         public override System.Threading.Tasks.Task WriteToStreamAsync(Type type, object value, 
-                                                                          System.IO.Stream stream, 
-                                                                          HttpContentHeaders contentHeaders,                                                                           
-                                                                          System.Net.TransportContext transportContext)
+                                                                          Stream stream, 
+                                                                          HttpContent contentHeaders,                                                                           
+                                                                          TransportContext transportContext)
         {            
             var task = Task.Factory.StartNew( () =>
                 {

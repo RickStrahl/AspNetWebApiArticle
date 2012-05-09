@@ -9,6 +9,8 @@ using System.IO;
 using Newtonsoft.Json.Converters;
 using System.Net.Http.Headers;
 using Newtonsoft.Json.Linq;
+using System.Net.Http;
+using System.Net;
 
 namespace Westwind.Web.WebApi
 {
@@ -34,7 +36,8 @@ namespace Westwind.Web.WebApi
         }
 
         public override System.Threading.Tasks.Task<object> ReadFromStreamAsync(Type type, 
-                                                            System.IO.Stream stream, System.Net.Http.Headers.HttpContentHeaders contentHeaders,
+                                                            Stream stream, 
+                                                            HttpContent content,
                                                             IFormatterLogger formatterLogger)
         {
             var task = Task<object>.Factory.StartNew(() =>
@@ -58,9 +61,9 @@ namespace Westwind.Web.WebApi
         }
 
         public override System.Threading.Tasks.Task WriteToStreamAsync(Type type, object value, 
-                                                                          System.IO.Stream stream, 
-                                                                          HttpContentHeaders contentHeaders,                                                                           
-                                                                          System.Net.TransportContext transportContext)
+                                                                          Stream stream, 
+                                                                          HttpContent content,                                                                           
+                                                                          TransportContext transportContext)
         {            
             var task = Task.Factory.StartNew( () =>
                 {                    

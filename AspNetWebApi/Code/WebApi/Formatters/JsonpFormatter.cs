@@ -62,29 +62,31 @@ namespace Westwind.Web.WebApi
             return formatter;
         }
         
-        public override Task WriteToStreamAsync(Type type, object value, Stream stream,
-                                                     HttpContentHeaders contentHeaders,
-                                                    TransportContext transportContext)
-        {         
-                            
+        public override Task WriteToStreamAsync(Type type, object value, 
+                                                Stream stream,
+                                                HttpContent content,
+                                                TransportContext transportContext)
+        {                                     
             if (!string.IsNullOrEmpty(JsonpCallbackFunction))
             {
                 return Task.Factory.StartNew(() =>
                 {
-                    var writer = new StreamWriter(stream);
-                    writer.Write( JsonpCallbackFunction + "(");
-                    writer.Flush();
+                    using (var writer = new StreamWriter(stream))
+                    {
+                        writer.Write( JsonpCallbackFunction + "(");
+                        writer.Flush();
 
-                    base.WriteToStreamAsync(type, value, stream, contentHeaders,
-                                            transportContext).Wait();
+                        base.WriteToStreamAsync(type, value, stream, content,
+                                                transportContext).Wait();
 
-                    writer.Write(")");
-                    writer.Flush();
+                        writer.Write(")");
+                        writer.Flush();
+                    }
                 });
             }
             else
             {
-                return base.WriteToStreamAsync(type, value, stream, contentHeaders, transportContext);
+                return base.WriteToStreamAsync(type, value, stream, content, transportContext);
             }
         }
 
