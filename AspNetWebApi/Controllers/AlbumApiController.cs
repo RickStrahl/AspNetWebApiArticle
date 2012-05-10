@@ -11,39 +11,40 @@ using System.Text;
 
 namespace AspNetWebApi.Controllers
 {
-public class AlbumApiController : ApiController
-{
-
-    public IEnumerable<Album> GetAlbums()
+    public class AlbumApiController : ApiController
     {
-        var albums = AlbumData.Current.OrderBy(alb => alb.Artist);
-        return albums;
-    }
 
-//    alternate implementation returning HttpResponseMessage
-    //public HttpResponseMessage GetAlbums()
-    //{
-    //    var albums = AlbumData.Current.OrderBy(alb => alb.Artist);
+        public IEnumerable<Album> GetAlbums()
+        {
+            var albums = AlbumData.Current.OrderBy(alb => alb.Artist);
+            return albums;
+        }
 
-    //    var resp = new HttpResponseMessage(HttpStatusCode.OK);
-    //    resp.Content = new ObjectContent<IEnumerable<Album>>(
-    //                            albums, new JsonMediaTypeFormatter());
+        //    alternate implementation returning HttpResponseMessage
+        //public HttpResponseMessage GetAlbums()
+        //{
+        //    var albums = AlbumData.Current.OrderBy(alb => alb.Artist);
 
-    //    var resp = Request.CreateResponse<IEnumerable<Album>>(HttpStatusCode.OK, albums);
+        //    var resp = new HttpResponseMessage(HttpStatusCode.OK);
+        //    resp.Content = new ObjectContent<IEnumerable<Album>>(
+        //                            albums, new JsonMediaTypeFormatter());
 
-    //    resp.Headers.ConnectionClose = true;
-    //    resp.Headers.CacheControl = new CacheControlHeaderValue();
-    //    resp.Headers.CacheControl.Public = true;
+        //    var resp = Request.CreateResponse<IEnumerable<Album>>(HttpStatusCode.OK, albums);
 
-    //    return resp;
-    //}
+        //    resp.Headers.ConnectionClose = true;
+        //    resp.Headers.CacheControl = new CacheControlHeaderValue();
+        //    resp.Headers.CacheControl.Public = true;
 
-    public Album GetAlbum(string title)
-    {
-        var album = AlbumData.Current
-                        .SingleOrDefault(alb => alb.AlbumName.Contains(title));
-        return album;
-    }
+        //    return resp;
+        //}
+
+        [HttpGet]
+        public Album GetAlbum(string title)
+        {
+            var album = AlbumData.Current
+                            .SingleOrDefault(alb => alb.AlbumName.Contains(title));
+            return album;
+        }
 
 
         public HttpResponseMessage PostAlbum(Album album)
@@ -73,7 +74,7 @@ public class AlbumApiController : ApiController
                 matchedAlbum = album;
 
             // return a string to show that the value got here
-            var resp = Request.CreateResponse(HttpStatusCode.OK,string.Empty);
+            var resp = Request.CreateResponse(HttpStatusCode.OK, string.Empty);
             resp.Content = new StringContent(album.AlbumName + " " + album.Entered.ToString(),
                                                 Encoding.UTF8, "text/plain");
             return resp;

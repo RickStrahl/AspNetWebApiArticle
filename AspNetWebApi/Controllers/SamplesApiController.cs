@@ -116,10 +116,69 @@ namespace AspNetWebApi.Controllers
                 Entered = dval.Entered
             };
 
-
-
-            return album.Id + " " + album.Entered.ToString("d"); 
+            return String.Format("{0} {1:d}", album.Id, album.Entered); 
         }
 
+        /// <summary>
+        /// Demonstrates passing multiple parameters into a method
+        /// </summary>
+        /// <param name="album"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public string PostAlbum(JObject jsonData)
+        {
+            dynamic json = jsonData;
+            JObject jalbum = json.Album;
+            JObject juser = json.User;
+            string token = json.UserToken;
+
+            var album = jalbum.ToObject<Album>();
+            var user = juser.ToObject<User>();
+
+            return String.Format("{0} {1} {2}", album.AlbumName, user.Name, token);
+        }
+
+        [HttpPost]
+        public string PostAlbum(Album album, string userToken)
+        {
+            
+            return String.Format("{0} {1:d} {2}", album.AlbumName, album.Entered,userToken);
+        }
+        
+
+        //public PostAlbumResponse PostAlbum(PostAlbumRequest request)
+        //{
+        //    var album = request.Album;
+        //    var userToken = request.UserToken;
+
+        //    return new PostAlbumResponse()
+        //    {
+        //         IsSuccess = true,
+        //         Result = String.Format("{0} {1:d} {2}", album.AlbumName, album.Entered,userToken)
+        //    };
+        //}
+
+    }
+
+    public class User
+    {
+        public string Name { get; set; }
+        public string Email { get; set; }
+        public string UserToken { get; set; }
+    }
+
+    public class PostAlbumRequest
+    {
+        public Album Album { get; set; }
+        public User User { get; set; }
+        public string UserToken { get; set; }
+    }
+
+    public class PostAlbumResponse
+    {
+        public string Result { get; set; }
+        public bool IsSuccess { get; set; }
+        public string ErrorMessage { get; set; }
     }
 }

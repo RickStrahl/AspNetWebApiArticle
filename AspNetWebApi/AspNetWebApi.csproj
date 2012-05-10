@@ -66,6 +66,8 @@
     <Reference Include="System.Configuration" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Controllers\Rick%27s WebForms Template1.aspx" />
+    <Content Include="RpcCalls.htm" />
     <Content Include="Css\Images\close.gif" />
     <Content Include="Css\Images\DialogHeader.png" />
     <Content Include="Css\Images\DialogHighlight.png" />
@@ -129,6 +131,13 @@
     <Compile Include="Controllers\AlbumApiController.cs" />
     <Compile Include="Controllers\AlbumRpcApiController.cs" />
     <Compile Include="Code\WebApi\Filters\ApiMessageError.cs" />
+    <Compile Include="Controllers\Rick%27s WebForms Template1.aspx.cs">
+      <DependentUpon>Rick%27s WebForms Template1.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controllers\Rick%27s WebForms Template1.aspx.designer.cs">
+      <DependentUpon>Rick%27s WebForms Template1.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Controllers\SamplesApiController.cs" />
     <Compile Include="HttpClient_Requests.aspx.cs">
       <DependentUpon>HttpClient_Requests.aspx</DependentUpon>
