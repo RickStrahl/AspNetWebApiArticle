@@ -8,10 +8,23 @@
     <script src="scripts/jquery.min.js" type="text/javascript"></script>
 </head>
 <body>
-    <h1>JsonP Callback</h1>
+    <h1>JSONP Callbacks with the JsonpFormatter</h1>
+    <div class="descriptionheader">
+        This example demonstrates calling one of the Web API endpoints 
+        by using JSONP which allows for cross-domain access to JSON data.
+        The configuration is adds a custom JSONP formatter (in global.asax)
+        that provides this functionality. This example is local by default, 
+        but if you access the albums URL remotely with a JSONP request it 
+        will serve the data cross-domain.
+    </div>
 
-    <div class="contentcontainer">
-        <h3>Albums loaded via jsonP:</h3>
+    <div class="toolbarcontainer">
+      <a href="./default.htm" class="hoverbutton"><img src="css/images/home.gif" /> Back to Samples</a>
+      <a href="jsonpclient.htm" class="hoverbutton"><img src="css/images/refresh.gif" /> Refresh</a>  
+    </div>
+
+    <div class="contentcontainer" style="width: 600px; margin: 50px auto;">
+        <h3>Albums loaded via JSONP:</h3>
         <hr />
         <div id="divAlbumList" >
             
@@ -25,20 +38,24 @@
             getAlbums();
         });
 
-	function getAlbums() {
-	    $.getJSON("albums?callback=?", null,
-              function (albums) {
-                  $(albums).each(function () {
-                      var $div =
-                         $("<div>")
-                            .data("id", this.Id)
-                            .text(this.AlbumName + " by  " + this.Artist)
-                            .css({ "padding-bottom": 5, "border-bottom": "dotted 1px teal" });
+	    function getAlbums() {
+            // for testing this is done locally, but JSONP
+            // works with GET calls for remote JSON data
+            // if you set this sample up on another machine you should
+            // be able to access the JSON data from there.
+	        $.getJSON("albums?callback=?", null,
+                  function (albums) {
+                      $(albums).each(function () {
+                          var $div =
+                             $("<div>")
+                                .data("id", this.Id)
+                                .text(this.AlbumName + " by  " + this.Artist)
+                                .css({ "padding-bottom": 5, "border-bottom": "dotted 1px teal" });
 
-                      $div.appendTo("#divAlbumList");
+                          $div.appendTo("#divAlbumList");
+                      });
                   });
-              });
-	}
+	    }
     </script>
 
 

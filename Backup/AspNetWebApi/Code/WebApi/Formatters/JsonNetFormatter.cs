@@ -3,7 +3,7 @@
 using System;
 using System.Net.Http.Formatting;
 using System.Threading.Tasks;
-
+using System.Web.Script.Serialization;
 using Newtonsoft.Json;
 using System.IO;
 using Newtonsoft.Json.Converters;
@@ -37,7 +37,7 @@ namespace Westwind.Web.WebApi
 
         public override System.Threading.Tasks.Task<object> ReadFromStreamAsync(Type type, 
                                                             Stream stream, 
-                                                            HttpContentHeaders content,
+                                                            HttpContent content,
                                                             IFormatterLogger formatterLogger)
         {
             var task = Task<object>.Factory.StartNew(() =>
@@ -60,10 +60,10 @@ namespace Westwind.Web.WebApi
             return task;
         }
 
-        public override Task WriteToStreamAsync(Type type, object value, 
-                                                Stream stream, 
-                                                HttpContentHeaders contentHeaders, 
-                                                TransportContext transportContext)
+        public override System.Threading.Tasks.Task WriteToStreamAsync(Type type, object value, 
+                                                                          Stream stream, 
+                                                                          HttpContent content,                                                                           
+                                                                          TransportContext transportContext)
         {            
             var task = Task.Factory.StartNew( () =>
                 {                    

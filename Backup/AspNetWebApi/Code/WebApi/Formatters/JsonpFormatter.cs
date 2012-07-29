@@ -63,9 +63,9 @@ namespace Westwind.Web.WebApi
         }
         
         public override Task WriteToStreamAsync(Type type, object value, 
-                                        Stream stream, 
-                                        HttpContentHeaders contentHeaders, 
-                                        TransportContext transportContext)
+                                                Stream stream,
+                                                HttpContent content,
+                                                TransportContext transportContext)
         {                                     
             if (!string.IsNullOrEmpty(JsonpCallbackFunction))
             {
@@ -76,7 +76,7 @@ namespace Westwind.Web.WebApi
                         writer.Write( JsonpCallbackFunction + "(");
                         writer.Flush();
 
-                        base.WriteToStreamAsync(type, value, stream, contentHeaders,
+                        base.WriteToStreamAsync(type, value, stream, content,
                                                 transportContext).Wait();
 
                         writer.Write(")");
@@ -86,7 +86,7 @@ namespace Westwind.Web.WebApi
             }
             else
             {
-                return base.WriteToStreamAsync(type, value, stream, contentHeaders, transportContext);
+                return base.WriteToStreamAsync(type, value, stream, content, transportContext);
             }
         }
 

@@ -83,29 +83,6 @@ namespace MusicAlbums
             album.AddSong("Ride on", "5:49");
             album.AddSong("Squealer", "5:14");
 
-            album = new Album()
-            {
-                Artist = "Condemned?",
-                AlbumName = "Condemned 2 Death",
-                YearReleased = 2011,
-                AlbumImageUrl = "http://ecx.images-amazon.com/images/I/61CMcYAP%2BQL._SL500_AA280_.jpg",
-                AmazonUrl = "http://www.amazon.com/gp/product/B004MC5YEY/ref=as_li_ss_tl?ie=UTF8&camp=1789&creative=390957&creativeASIN=B004MC5YEY&linkCode=as2&tag=westwindtechn-20"                
-            };
-            albums.Add(album);
-            album.AddSong("Big Time Game Hunting", "2:40");
-            album.AddSong("Aggressive System", "1:22");
-            album.AddSong("Thoughts of Equality", "3:57");
-            album.AddSong("Practicing for War", "1:45");
-            album.AddSong("Crutch", "0:37");
-            album.AddSong("Anti-Social", "2:35");
-            album.AddSong("Cavern in Time", "2:56");
-            album.AddSong("Crucified System", "3:05");
-            album.AddSong("Emotional Blur", "3:25");
-            album.AddSong("Cleansing Pool", "2:26");
-            album.AddSong("Ocean", "1:25");
-            album.AddSong("Save Thy Brother", "2:57");
-            album.AddSong("D-Day", "0:46");
-            album.AddSong("When Worlds Collide", "3:16");
 
             album = new Album()
             {

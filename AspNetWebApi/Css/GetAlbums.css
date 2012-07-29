@@ -1,0 +1,58 @@
+﻿.album
+{
+     height: 70px;
+     padding: 5px; 
+     background: #FFFFF0;
+     
+     border-bottom: dashed 1px steelblue; 
+     display:none;
+}
+.album:hover
+{
+    background: khaki;
+}
+.removeimage
+{
+    opacity: .90;
+    cursor: pointer;
+}
+.removeimage:hover
+{
+    opacity: 1;        
+}
+.fielditem
+{
+    margin-top: 10px;        
+}
+.fielditem input[type=text]
+{
+    width: 300px;
+}
+.album-artist
+{
+    color: Brown;       
+    font-weight: bold;
+    margin: 5px 0;
+}
+.song-container
+{
+    overflow-y: auto;
+}
+.frame
+{
+    border: solid 1px silver;        
+}
+.frame-header
+{
+    background-image: url(images/headergradient.png);    
+	background-repeat: repeat-x;
+	text-align: left;
+	color: cornsilk;
+	padding: 5px;	
+	padding-left: 10px;
+	font-size: 1.02em;
+	font-weight: bold;	
+	position: relative;             
+}
+
+    

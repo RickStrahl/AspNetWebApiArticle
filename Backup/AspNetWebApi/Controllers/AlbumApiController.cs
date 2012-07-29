@@ -37,7 +37,8 @@ namespace AspNetWebApi.Controllers
 
         //    return resp;
         //}
-        
+
+        [HttpGet]
         public Album GetAlbum(string title)
         {
             var album = AlbumData.Current

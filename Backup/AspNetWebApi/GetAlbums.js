@@ -29,7 +29,7 @@ $(document).ready(function () {
     $("#btnLoadData").click(page.loadAlbums);
 
     // Album click handling
-    $(".albumlink,.album").live("click", page.loadAlbum);    
+    $(".albumlink").live("click", page.loadAlbum);
 
     // Delete button handling
     $(".removeimage").live("click", page.deleteAlbum);
@@ -50,8 +50,6 @@ $(document).ready(function () {
 
 
 page.loadAlbums = function (showFirst) {
-
-
     $.getJSON("albums/", function (albums) {
         if (!globals.albumsView) {
             // first time bind
@@ -152,9 +150,9 @@ page.saveStaticAlbum = function() {
         "AlbumImageUrl": "http://ecx.images-amazon.com/images/I/510oasvdvsL._SL500_AA300_.jpg",
         "AmazonUrl": "http://www.amazon.com/gp/product/B00008WT5E/ref=as_li_ss_tl?ie=UTF8&tag=westwindtechn-20&linkCode=as2&camp=1789&creative=390957&creativeASIN=B00008WT5E",
         "Songs": [
-            { "SongName": "Rock 'n Roll Damnation", "SongLength": 3.12},
-            { "SongName": "Downpayment Blues", "SongLength": 4.22 },
-            { "SongName": "Riff Raff", "SongLength": 2.42 }
+            { "SongName": "Rock 'n Roll Damnation" },
+            { "SongName": "Downpayment Blues" },
+            { "SongName": "Riff Raff" }
         ]
     }
 
