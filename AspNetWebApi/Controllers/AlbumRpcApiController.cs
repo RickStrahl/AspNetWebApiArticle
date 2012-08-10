@@ -21,10 +21,13 @@ namespace AspNetWebApi.Controllers
     /// </summary>
     public class AlbumRpcApiController : ApiController
     {
-        [HttpGet,Queryable]
+        [HttpGet]
         public IQueryable<Album> SortableAlbums()
         {
             var albums = AlbumData.Current;
+         
+            // generally should be done only on actual queryable results (EF etc.)
+            // Done here because we're running with a static list but otherwise might be slow
             return albums.AsQueryable();
         }
 

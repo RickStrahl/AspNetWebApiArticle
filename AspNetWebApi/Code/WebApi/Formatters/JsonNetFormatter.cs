@@ -37,7 +37,7 @@ namespace Westwind.Web.WebApi
 
         public override System.Threading.Tasks.Task<object> ReadFromStreamAsync(Type type, 
                                                             Stream stream, 
-                                                            HttpContentHeaders content,
+                                                            HttpContent content,
                                                             IFormatterLogger formatterLogger)
         {
             var task = Task<object>.Factory.StartNew(() =>
@@ -62,7 +62,7 @@ namespace Westwind.Web.WebApi
 
         public override Task WriteToStreamAsync(Type type, object value, 
                                                 Stream stream, 
-                                                HttpContentHeaders contentHeaders, 
+                                                HttpContent content, 
                                                 TransportContext transportContext)
         {            
             var task = Task.Factory.StartNew( () =>

@@ -2,6 +2,7 @@
 using System.Web.Routing;
 using System.Web.Http;
 using System.Globalization;
+using Westwind.Web.WebApi;
 //using Westwind.Web.WebApi;
 
 namespace AspNetWebApi
@@ -91,7 +92,8 @@ namespace AspNetWebApi
             // This leaves the old one in place so JsonValue/JsonObject/JsonArray still are handled
             //config.Formatters.Insert(0, new JsonNetFormatter());
 
-            config.Formatters.Insert(0, new Westwind.Web.WebApi.JsonpFormatter());
+            config.Formatters.Insert(0, new JsonpFormatter());
+            config.Formatters.Insert(1, new UrlEncodedFormatter());
 
             // Add an exception filter
             //GlobalConfiguration.Configuration.Filters.Add(new UnhandledExceptionFilter());

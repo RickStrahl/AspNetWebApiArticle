@@ -140,10 +140,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Code\WebApi\Filters\UnhandledExceptionFilter.cs" />
-    <Compile Include="Code\WebApi\Formatters\UrlEncodedHandler.cs" />
     <Compile Include="Code\WebApi\Formatters\JsonpFormatter.cs" />
     <Compile Include="Code\WebApi\Formatters\JavaScriptSerializerFormatter.cs" />
     <Compile Include="Code\WebApi\Formatters\JsonNetFormatter.cs" />
+    <Compile Include="Code\WebApi\Formatters\UrlEncodedHandler.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Controllers\AlbumApiController.cs" />
     <Compile Include="Controllers\AlbumRpcApiController.cs" />
     <Compile Include="Code\WebApi\Filters\ApiMessageError.cs" />
