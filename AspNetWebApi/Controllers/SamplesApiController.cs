@@ -7,6 +7,9 @@ using MusicAlbums;
 using System.Net;
 using System.Xml;
 using Newtonsoft.Json.Linq;
+using System.Web.Security;
+using System.Web;
+using System.Net.Http.Headers;
 
 namespace AspNetWebApi.Controllers
 {
@@ -32,8 +35,6 @@ namespace AspNetWebApi.Controllers
                     new ApiMessageError("Your code stinks!"));
             throw new HttpResponseException(resp);
         }
-
-
 
 
         [HttpGet]
@@ -81,6 +82,51 @@ namespace AspNetWebApi.Controllers
         {
             public string Message { get; set; }
         }
+
+
+
+        /// <summary>
+        /// Test Forms Authentication based login
+        /// Don't do this unless it's over SSL and use POST not GET
+        /// Done to test that FormsAuth cookies are sent and retrieved
+        /// </summary>
+        /// <param name="username"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
+[HttpPost]
+public HttpResponseMessage Authenticate(LoginData login)
+{
+    //var username = form.Get("Username");
+    //var password = form.Get("Password");
+
+    string username = login.Username;
+    string password = login.Password;
+
+    bool authenticated = FormsAuthentication.Authenticate(username, password);
+    var cookie = FormsAuthentication.GetAuthCookie(username, false);
+
+    if (!authenticated)
+        return Request.CreateResponse<bool>(HttpStatusCode.Unauthorized, false);
+
+    var response = Request.CreateResponse<bool>(HttpStatusCode.OK, true);
+    response.Headers.AddCookies(new CookieHeaderValue[1] { new CookieHeaderValue(cookie.Name, cookie.Value) });
+
+    return response;
+}
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public bool IsAuthenticated()
+        {
+            if (User.Identity.IsAuthenticated)
+                return true;
+
+            return false;
+        }
+
 
 
         [HttpGet]
@@ -160,6 +206,12 @@ namespace AspNetWebApi.Controllers
         //}
 
     }
+
+public class LoginData
+{
+    public string Username { get; set; }
+    public string Password { get; set; }
+}
 
     public class User
     {

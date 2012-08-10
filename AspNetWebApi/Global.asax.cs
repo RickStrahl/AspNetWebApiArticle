@@ -29,7 +29,7 @@ namespace AspNetWebApi
                 defaults: new
                 {
                     title = RouteParameter.Optional,
-                    controller = "SamplesApi"                    
+                    controller = "SamplesApi",
                 }
             );
             
@@ -60,7 +60,7 @@ namespace AspNetWebApi
 
             var conf = new HttpConfiguration();
             
-
+            // Display errors in response locally
             GlobalConfiguration
                    .Configuration
                    .IncludeErrorDetailPolicy = IncludeErrorDetailPolicy.LocalOnly;

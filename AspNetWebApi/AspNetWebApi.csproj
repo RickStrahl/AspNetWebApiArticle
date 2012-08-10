@@ -47,7 +47,7 @@
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.4.5.1\lib\net40\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.4.5.8\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System" />
@@ -140,6 +140,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Code\WebApi\Filters\UnhandledExceptionFilter.cs" />
+    <Compile Include="Code\WebApi\Formatters\UrlEncodedHandler.cs" />
     <Compile Include="Code\WebApi\Formatters\JsonpFormatter.cs" />
     <Compile Include="Code\WebApi\Formatters\JavaScriptSerializerFormatter.cs" />
     <Compile Include="Code\WebApi\Formatters\JsonNetFormatter.cs" />
@@ -166,7 +167,9 @@
     <Folder Include="bin\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="packages.config" />
+    <Content Include="packages.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
