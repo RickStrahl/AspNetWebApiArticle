@@ -11,7 +11,7 @@ using System.Web.Security;
 using System.Web;
 using System.Net.Http.Headers;
 
-namespace AspNetWebApi.Controllers
+namespace AspNetWebApi
 {
     /// <summary>
     /// Sample API Controller that demonstrates various different
@@ -93,29 +93,32 @@ namespace AspNetWebApi.Controllers
         /// <param name="username"></param>
         /// <param name="password"></param>
         /// <returns></returns>
-[HttpPost]
-public HttpResponseMessage Authenticate(LoginData login)
-{
-    //var username = form.Get("Username");
-    //var password = form.Get("Password");
+        [HttpPost]
+        public HttpResponseMessage Authenticate(LoginData login)
+        {
+            //var username = form.Get("Username");
+            //var password = form.Get("Password");
 
-    string username = login.Username;
-    string password = login.Password;
+            string username = login.Username;
+            string password = login.Password;
 
-    bool authenticated = FormsAuthentication.Authenticate(username, password);
-    var cookie = FormsAuthentication.GetAuthCookie(username, false);
+            bool authenticated = FormsAuthentication.Authenticate(username, password);
+            var cookie = FormsAuthentication.GetAuthCookie(username, false);
 
-    if (!authenticated)
-        return Request.CreateResponse<bool>(HttpStatusCode.Unauthorized, false);
+            if (!authenticated)
+                return Request.CreateResponse<bool>(HttpStatusCode.Unauthorized, false);
 
-    var response = Request.CreateResponse<bool>(HttpStatusCode.OK, true);
-    response.Headers.AddCookies(new CookieHeaderValue[1] { new CookieHeaderValue(cookie.Name, cookie.Value) });
+            var response = Request.CreateResponse<bool>(HttpStatusCode.OK, true);
+            response.Headers.AddCookies(new CookieHeaderValue[1] { new CookieHeaderValue(cookie.Name, cookie.Value) });
 
-    return response;
-}
+            return response;
+        }
 
         /// <summary>
-        /// 
+        /// Verify whether Authenticate worked. If Authenticate was successful
+        /// IsAuthenticated should return true on subsequent request assuming
+        /// client passes the auth cookie (ie. XHR in browser, or Http client 
+        /// that explicitly forwards cookie headers).
         /// </summary>
         /// <returns></returns>
         [HttpGet]
@@ -128,13 +131,22 @@ public HttpResponseMessage Authenticate(LoginData login)
         }
 
 
-
+        /// <summary>
+        /// Returning the request body as a string
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpGet]
         public string ReturnRequestBody(HttpRequestMessage request)
         {
             return request.Content.ReadAsStringAsync().Result;
         }
 
+        /// <summary>
+        /// Returning request body of an XML document as a string
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpPost]
         public string ReturnXmlDocument(HttpRequestMessage request)
         {
@@ -148,12 +160,12 @@ public HttpResponseMessage Authenticate(LoginData login)
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        [HttpPost,HttpGet]
+        [HttpPost, HttpGet]
         public string JsonValue(JObject value)
-        {            
+        {
             // Dynamically parse json object
             dynamic dval = value;
-            
+
             string val = dval.Id;
 
             Album album = new Album()
@@ -162,7 +174,7 @@ public HttpResponseMessage Authenticate(LoginData login)
                 Entered = dval.Entered
             };
 
-            return String.Format("{0} {1:d}", album.Id, album.Entered); 
+            return String.Format("{0} {1:d}", album.Id, album.Entered);
         }
 
         /// <summary>
@@ -185,33 +197,47 @@ public HttpResponseMessage Authenticate(LoginData login)
             return String.Format("{0} {1} {2}", album.AlbumName, user.Name, token);
         }
 
+        /// <summary>
+        /// Example of passing multiple parameters. Note userToken must be
+        /// passed as a query string value.
+        /// </summary>
+        /// <param name="album"></param>
+        /// <param name="userToken"></param>
+        /// <returns></returns>
         [HttpPost]
         public string PostAlbum(Album album, string userToken)
         {
-            
-            return String.Format("{0} {1:d} {2}", album.AlbumName, album.Entered,userToken);
+
+            return String.Format("{0} {1:d} {2}", album.AlbumName, album.Entered, userToken);
         }
-        
 
-        //public PostAlbumResponse PostAlbum(PostAlbumRequest request)
-        //{
-        //    var album = request.Album;
-        //    var userToken = request.UserToken;
+        /// <summary>
+        /// Demonstrates using a Request and Response Parameter wrappers
+        /// to provide a full type for model or value wrapping.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public PostAlbumResponse PostAlbum(PostAlbumRequest request)
+        {
+            var album = request.Album;
+            var userToken = request.UserToken;
 
-        //    return new PostAlbumResponse()
-        //    {
-        //         IsSuccess = true,
-        //         Result = String.Format("{0} {1:d} {2}", album.AlbumName, album.Entered,userToken)
-        //    };
-        //}
+            return new PostAlbumResponse()
+            {
+                IsSuccess = true,
+                Result = String.Format("{0} {1:d} {2}", album.AlbumName, album.Entered, userToken)
+            };
+        }
 
     }
 
-public class LoginData
-{
-    public string Username { get; set; }
-    public string Password { get; set; }
-}
+    public class LoginData
+    {
+        public string Username { get; set; }
+        public string Password { get; set; }
+    }
+
 
     public class User
     {

@@ -41,7 +41,7 @@ namespace AspNetWebApi.Controllers
         public HttpResponseMessage AlbumArt(string title)
         {            
             var album = AlbumData.Current
-                         .FirstOrDefault(abl => abl.AlbumName.StartsWith(title));
+                            .FirstOrDefault(abl => abl.AlbumName.StartsWith(title));
             if (album == null)
             {
                 var resp = Request.CreateResponse<ApiMessageError>(
@@ -63,6 +63,8 @@ namespace AspNetWebApi.Controllers
 
             return result;
         }
+
+
 
         [HttpGet]
         public HttpResponseMessage ResetAlbumData()

@@ -76,6 +76,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.4.0.20505.0\lib\net40\System.Web.Http.WebHost.dll</HintPath>
     </Reference>
+    <Reference Include="System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Configuration" />
   </ItemGroup>
@@ -143,9 +144,6 @@
     <Compile Include="Code\WebApi\Formatters\JsonpFormatter.cs" />
     <Compile Include="Code\WebApi\Formatters\JavaScriptSerializerFormatter.cs" />
     <Compile Include="Code\WebApi\Formatters\JsonNetFormatter.cs" />
-    <Compile Include="Code\WebApi\Formatters\UrlEncodedHandler.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Controllers\AlbumApiController.cs" />
     <Compile Include="Controllers\AlbumRpcApiController.cs" />
     <Compile Include="Code\WebApi\Filters\ApiMessageError.cs" />
