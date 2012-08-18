@@ -10,13 +10,15 @@ using Newtonsoft.Json.Linq;
 using System.Web.Security;
 using System.Web;
 using System.Net.Http.Headers;
+using System.Collections.Generic;
 
 namespace AspNetWebApi
 {
     /// <summary>
     /// Sample API Controller that demonstrates various different
     /// kinds of data types that can be passed and returned
-    /// </summary>
+    /// </summary>    
+    [UnhandledExceptionFilter]
     public class SamplesApiController : ApiController
     {
 
@@ -25,7 +27,7 @@ namespace AspNetWebApi
         {
             throw new UnauthorizedAccessException("Unauthorized Access Sucka");
         }
-
+        
         [HttpGet]
         public void ThrowError()
         {
@@ -34,6 +36,18 @@ namespace AspNetWebApi
                     HttpStatusCode.BadRequest,
                     new ApiMessageError("Your code stinks!"));
             throw new HttpResponseException(resp);
+        }
+
+        [HttpGet]
+        public void ThrowErrorSafe()
+        {
+            try
+            {
+                List<string> list = null;
+                list.Add("Rick");
+            }
+            catch (Exception ex)
+            { ThrowSafeException(ex.Message); }
         }
 
 

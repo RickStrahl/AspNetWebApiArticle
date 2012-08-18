@@ -12,13 +12,11 @@ using System.Xml;
 namespace AspNetWebApi.Controllers
 {
     
-  
-
     /// <summary>
     /// This class demonstrates routing using traditional 
     /// action method routing which tends to be way more
     /// flexible than the limited HTTP verb routing.    
-    /// </summary>
+    /// </summary>    
     public class AlbumRpcApiController : ApiController
     {
         [HttpGet]
@@ -29,11 +27,6 @@ namespace AspNetWebApi.Controllers
             // generally should be done only on actual queryable results (EF etc.)
             // Done here because we're running with a static list but otherwise might be slow
             return albums.AsQueryable();
-        }
-
-        public static bool IsDotNet45()
-        {
-            return Environment.Version.Revision > 15000;
         }
 
 
