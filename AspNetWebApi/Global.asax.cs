@@ -10,9 +10,23 @@ namespace AspNetWebApi
     public class Global : System.Web.HttpApplication
     {
         protected void Application_Start(object sender, EventArgs e)
-        {
+        {           
             
 
+            // Display errors in response locally
+            GlobalConfiguration
+                   .Configuration
+                   .IncludeErrorDetailPolicy = IncludeErrorDetailPolicy.LocalOnly;
+
+            RegisterApiRoutes(GlobalConfiguration.Configuration);
+
+            // WebApi Configuration to hook up formatters and message handlers
+            // optional
+            RegisterApis(GlobalConfiguration.Configuration);
+        }
+
+        private void RegisterApiRoutes(HttpConfiguration configuration)
+        {
             RouteTable.Routes.MapHttpRoute(
                 name: "AlbumRpcApiAction",
                 routeTemplate: "albums/rpc/{action}/{title}",
@@ -56,7 +70,7 @@ namespace AspNetWebApi
                 }
             );
 
-            
+
             // Verb Routing 
             RouteTable.Routes.MapHttpRoute(
                     name: "AlbumsVerbs",
@@ -64,20 +78,9 @@ namespace AspNetWebApi
                     defaults: new
                     {
                         title = RouteParameter.Optional,
-                        controller = "AlbumApi"                   
+                        controller = "AlbumApi"
                     }
                 );
-
-            var conf = new HttpConfiguration();
-            
-            // Display errors in response locally
-            GlobalConfiguration
-                   .Configuration
-                   .IncludeErrorDetailPolicy = IncludeErrorDetailPolicy.LocalOnly;
-
-            // WebApi Configuration to hook up formatters and message handlers
-            // optional
-            RegisterApis(GlobalConfiguration.Configuration);
         }
 
         public static void RegisterApis(HttpConfiguration config)
@@ -104,9 +107,8 @@ namespace AspNetWebApi
             config.Formatters.Insert(0, new JsonpFormatter());           
 
             // Add an exception filter
-            //GlobalConfiguration.Configuration.Filters.Add(new UnhandledExceptionFilter());
+            GlobalConfiguration.Configuration.Filters.Add(new UnhandledExceptionFilter());
             config.Filters.Add(new UnhandledExceptionFilter());
-
 
         }
         
