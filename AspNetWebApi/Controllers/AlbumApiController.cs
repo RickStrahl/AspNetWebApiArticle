@@ -48,38 +48,45 @@ public class AlbumApiController : ApiController
     }
 
 
-        public HttpResponseMessage PostAlbum(Album album)
+public HttpResponseMessage PostAlbum(Album album)
+{
+    if (!this.ModelState.IsValid)
+    {
+        // my custom error class
+        var error = new ApiMessageError() { message = "Model is invalid" };
+
+        // add errors into our client error model for client
+        foreach (var prop in ModelState.Values)
         {
-            if (!this.ModelState.IsValid)
-            {
-                // my custom error class
-                var error = new ApiMessageError() { message = "Model is invalid" };
-                foreach (var prop in ModelState.Values)
-                {
-                    if (prop.Errors.Any())
-                        error.errors.Add(prop.Errors.First().ErrorMessage);
-                }
-                // Return the error object as a response with an error code
-                return Request.CreateResponse<ApiMessageError>(HttpStatusCode.Conflict, error);
-            }
-
-            foreach (var song in album.Songs)
-                song.AlbumId = album.Id;
-
-            var matchedAlbum = AlbumData.Current
-                            .SingleOrDefault(alb => alb.Id == album.Id ||
-                                             alb.AlbumName == album.AlbumName);
-            if (matchedAlbum == null)
-                AlbumData.Current.Add(album);
+            var modelError = prop.Errors.FirstOrDefault();
+            if (!string.IsNullOrEmpty(modelError.ErrorMessage))    
+                error.errors.Add(modelError.ErrorMessage);
             else
-                matchedAlbum = album;
-
-            // return a string to show that the value got here
-            var resp = Request.CreateResponse(HttpStatusCode.OK, string.Empty);
-            resp.Content = new StringContent(album.AlbumName + " " + album.Entered.ToString(),
-                                                Encoding.UTF8, "text/plain");
-            return resp;
+                error.errors.Add(modelError.Exception.Message);
         }
+
+        return Request.CreateResponse<ApiMessageError>(HttpStatusCode.Conflict, error);
+    }
+
+    // update song id which isn't provided
+    foreach (var song in album.Songs)
+        song.AlbumId = album.Id;
+
+    // see if album exists already
+    var matchedAlbum = AlbumData.Current
+                    .SingleOrDefault(alb => alb.Id == album.Id ||
+                                     alb.AlbumName == album.AlbumName);
+    if (matchedAlbum == null)
+        AlbumData.Current.Add(album);
+    else
+        matchedAlbum = album;
+
+    // return a string to show that the value got here
+    var resp = Request.CreateResponse(HttpStatusCode.OK, string.Empty);
+    resp.Content = new StringContent(album.AlbumName + " " + album.Entered.ToString(),
+                                        Encoding.UTF8, "text/plain");
+    return resp;
+}
 
         // PUT /api/<controller>/5
         public HttpResponseMessage PutAlbum(Album album)

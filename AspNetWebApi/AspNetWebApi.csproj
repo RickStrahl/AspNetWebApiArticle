@@ -52,7 +52,6 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Net.Http, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.Net.Http.2.0.20505.0\lib\net40\System.Net.Http.dll</HintPath>
@@ -82,8 +81,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Css\GetAlbums.css" />
+    <Content Include="GetAlbums.htm" />
+    <Content Include="GetAlbums.js" />
+    <Content Include="HttpClient_Requests.aspx" />
     <Content Include="Images\Load16.png" />
-    <Content Include="RpcCalls.htm" />
     <Content Include="Css\Images\close.gif" />
     <Content Include="Css\Images\DialogHeader.png" />
     <Content Include="Css\Images\DialogHighlight.png" />
@@ -116,11 +117,9 @@
     <Content Include="Css\Reset.css" />
     <Content Include="Css\Standard.css" />
     <Content Include="default.htm" />
-    <Content Include="GetAlbums.htm" />
-    <Content Include="GetAlbums.js" />
     <Content Include="Global.asax" />
-    <Content Include="HttpClient_Requests.aspx" />
     <Content Include="JsonpClient.htm" />
+    <Content Include="RpcCalls.htm" />
     <Content Include="scripts\knockout-mapping.js" />
     <Content Include="scripts\jquery-vsdoc.js" />
     <Content Include="scripts\jquery.js" />
@@ -140,14 +139,28 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Code\WebApi\Filters\UnhandledExceptionFilter.cs" />
-    <Compile Include="Code\WebApi\Formatters\JsonpFormatter.cs" />
-    <Compile Include="Code\WebApi\Formatters\JavaScriptSerializerFormatter.cs" />
-    <Compile Include="Code\WebApi\Formatters\JsonNetFormatter.cs" />
+    <Compile Include="Code\WebApi\Filters\ApiMessageError.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Code\WebApi\Filters\UnhandledExceptionFilter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Code\WebApi\Formatters\JavaScriptSerializerFormatter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Code\WebApi\Formatters\JsonNetFormatter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Code\WebApi\Formatters\JsonpFormatter.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Controllers\AlbumApiController.cs" />
-    <Compile Include="Controllers\AlbumRpcApiController.cs" />
-    <Compile Include="Code\WebApi\Filters\ApiMessageError.cs" />
-    <Compile Include="Controllers\SamplesApiController.cs" />
+    <Compile Include="Controllers\AlbumRpcApiController.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Controllers\SamplesApiController.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="HttpClient_Requests.aspx.cs">
       <DependentUpon>HttpClient_Requests.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

@@ -27,7 +27,7 @@ namespace AspNetWebApi
         {
             throw new UnauthorizedAccessException("Unauthorized Access Sucka");
         }
-        
+
         [HttpGet]
         public void ThrowError()
         {
@@ -107,7 +107,7 @@ namespace AspNetWebApi
         /// <param name="username"></param>
         /// <param name="password"></param>
         /// <returns></returns>
-        [HttpPost]
+        [HttpPost, HttpGet]
         public HttpResponseMessage Authenticate(LoginData login)
         {
             //var username = form.Get("Username");
@@ -198,7 +198,7 @@ namespace AspNetWebApi
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpPost]
-        public string PostAlbum(JObject jsonData)
+        public string PostAlbumDynamicJson(JObject jsonData)
         {
             dynamic json = jsonData;
             JObject jalbum = json.Album;
@@ -209,6 +209,13 @@ namespace AspNetWebApi
             var user = juser.ToObject<User>();
 
             return String.Format("{0} {1} {2}", album.AlbumName, user.Name, token);
+        }
+
+        [HttpPost]
+        public string PostAlbumForm(FormDataCollection form)
+        {
+            return string.Format("{0} - released {1}",
+                                    form.Get("AlbumName"), form.Get("RearReleased"));
         }
 
         /// <summary>

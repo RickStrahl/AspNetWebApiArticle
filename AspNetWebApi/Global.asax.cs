@@ -16,7 +16,7 @@ namespace AspNetWebApi
             // Display errors in response locally
             GlobalConfiguration
                    .Configuration
-                   .IncludeErrorDetailPolicy = IncludeErrorDetailPolicy.LocalOnly;
+                   .IncludeErrorDetailPolicy = IncludeErrorDetailPolicy.Never;
 
             RegisterApiRoutes(GlobalConfiguration.Configuration);
 

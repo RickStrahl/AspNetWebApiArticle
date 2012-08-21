@@ -125,7 +125,7 @@ page.newAlbumDialog = function () {
     else
         ko.mapping.fromJS(data, albumEditView);
 }
-
+$.post("albums/",{AlbumName: "Dirty Deeds", YearReleased: 1976 … },albumPostCallback);
 
 
 page.deleteAlbum = function() {
@@ -147,7 +147,7 @@ page.saveStaticAlbum = function() {
         "Id": id,
         "AlbumName": "Power Age",
         "Artist": "AC/DC",
-        "YearReleased": 1977,
+        "YearReleased": "aa1977",
         "Entered": "2002-03-11T18:24:43.5580794-10:00",
         "AlbumImageUrl": "http://ecx.images-amazon.com/images/I/510oasvdvsL._SL500_AA300_.jpg",
         "AmazonUrl": "http://www.amazon.com/gp/product/B00008WT5E/ref=as_li_ss_tl?ie=UTF8&tag=westwindtechn-20&linkCode=as2&camp=1789&creative=390957&creativeASIN=B00008WT5E",
