@@ -107,8 +107,8 @@ namespace AspNetWebApi
             config.Formatters.Insert(0, new JsonpFormatter());           
 
             // Add an exception filter
-            GlobalConfiguration.Configuration.Filters.Add(new UnhandledExceptionFilter());
-            config.Filters.Add(new UnhandledExceptionFilter());
+            //GlobalConfiguration.Configuration.Filters.Add(new UnhandledExceptionFilter());
+            //config.Filters.Add(new UnhandledExceptionFilter());
 
         }
         
