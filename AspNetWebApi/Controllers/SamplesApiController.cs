@@ -35,8 +35,24 @@ namespace AspNetWebApi
             var resp = Request.CreateResponse<ApiMessageError>(
                     HttpStatusCode.BadRequest,
                     new ApiMessageError("Your code stinks!"));
-            throw new HttpResponseException(resp);
+            throw new HttpResponseException(resp);            
         }
+
+        /// <summary>
+        /// Using CreateErrorResponse native in Web API produces
+        /// an exception object to the client
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public HttpResponseMessage ThrowHttpError()
+        {
+            var ex = new ApplicationException("Whoa, hold on an application Error Occurred");
+            ex.Source = "Source code";
+            ///ex.StackTrace = "Stack Trace";
+
+            return Request.CreateErrorResponse(HttpStatusCode.BadRequest,ex);            
+        }
+        
 
         [HttpGet]
         public void ThrowErrorSafe()

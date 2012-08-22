@@ -125,7 +125,6 @@ page.newAlbumDialog = function () {
     else
         ko.mapping.fromJS(data, albumEditView);
 }
-$.post("albums/",{AlbumName: "Dirty Deeds", YearReleased: 1976 … },albumPostCallback);
 
 
 page.deleteAlbum = function() {

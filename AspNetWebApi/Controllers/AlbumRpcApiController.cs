@@ -58,7 +58,6 @@ namespace AspNetWebApi.Controllers
         }
 
 
-
         [HttpGet]
         public HttpResponseMessage ResetAlbumData()
         {
