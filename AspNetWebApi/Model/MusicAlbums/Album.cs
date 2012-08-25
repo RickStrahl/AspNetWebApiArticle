@@ -13,6 +13,8 @@ public class Song
     public string SongName { get; set; }
     [StringLength(5)]
     public string SongLength { get; set; }
+        
+    public GenericUriParserOptions options { get; set; }
 
 }
 

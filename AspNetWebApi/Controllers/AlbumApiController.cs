@@ -51,20 +51,25 @@ public class AlbumApiController : ApiController
     public HttpResponseMessage PostAlbum(Album album)
     {
         if (!this.ModelState.IsValid)
-        {
-            // my custom error class
-            var error = new ApiMessageError() { message = "Model is invalid" };
+        {            
+            //// my custom error class
+            //var error = new ApiMessageError() { message = "Model is invalid" };
 
-            // add errors into our client error model for client
-            foreach(var modelItem in ModelState)
-			{                
-                var modelError = modelItem.Value.Errors.FirstOrDefault();
-                if (!string.IsNullOrEmpty(modelError.ErrorMessage))    
-                    modelItem.Value.Errors.Add(modelItem.Key + ": " + modelError.ErrorMessage);
-                else
-                    modelItem.Value.Errors.Add(modelItem.Key + ": " + modelError.Exception.Message);
-            }
+            //// add errors into our client error model for client
+            //foreach(var modelItem in ModelState)
+            //{                
+            //    var modelError = modelItem.Value.Errors.FirstOrDefault();
+            //    if (!string.IsNullOrEmpty(modelError.ErrorMessage))    
+            //        error.errors.Add(modelItem.Key + ": " + modelError.ErrorMessage);
+            //    else
+            //        error.errors.Add(modelItem.Key + ": " + modelError.Exception.Message);
+            //}
+            
+            // Default Error Result
             //return Request.CreateErrorResponse(HttpStatusCode.Conflict, ModelState);
+
+            // Customized error handling
+            var error = new ApiMessageError(ModelState); 
             return Request.CreateResponse<ApiMessageError>(HttpStatusCode.Conflict, error);
         }
 

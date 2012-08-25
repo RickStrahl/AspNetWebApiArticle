@@ -3,6 +3,7 @@ using System.Web.Routing;
 using System.Web.Http;
 using System.Globalization;
 using Westwind.Web.WebApi;
+using Newtonsoft.Json.Converters;
 //using Westwind.Web.WebApi;
 
 namespace AspNetWebApi
@@ -104,9 +105,17 @@ namespace AspNetWebApi
             // This leaves the old one in place so JsonValue/JsonObject/JsonArray still are handled
             //config.Formatters.Insert(0, new JsonNetFormatter());
 
-            config.Formatters.Insert(0, new JsonpFormatter());           
+            // configure stock formatter
+            //config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new StringEnumConverter());
+            //config.Formatters.JsonFormatter.SerializerSettings.Formatting = Newtonsoft.Json.Formatting.Indented;
+            
+            // Add a custom JsonP converter which effectively replaces the default JSON formatter     
+            // you can configue the custom formatter in it's creation code
+            config.Formatters.Insert(0, new JsonpFormatter());
 
-            // Add an exception filter
+            var cons = config.Formatters.JsonFormatter.SerializerSettings.Converters;
+
+            // Add the exception filter
             //GlobalConfiguration.Configuration.Filters.Add(new UnhandledExceptionFilter());
             //config.Filters.Add(new UnhandledExceptionFilter());
 

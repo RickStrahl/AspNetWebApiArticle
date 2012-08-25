@@ -6,6 +6,8 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Web;
 using System.Net.Http;
+using Newtonsoft.Json.Converters;
+using System.Web.Http;
 
 namespace Westwind.Web.WebApi
 {
@@ -20,8 +22,6 @@ namespace Westwind.Web.WebApi
         {
             SupportedMediaTypes.Add(new MediaTypeHeaderValue("application/json"));
             SupportedMediaTypes.Add(new MediaTypeHeaderValue("text/javascript"));
-            
-            //MediaTypeMappings.Add(new UriPathExtensionMapping("jsonp", "application/json"));
             
             JsonpParameterName = "callback";
         }
@@ -57,37 +57,66 @@ namespace Westwind.Web.WebApi
             {                 
                 JsonpCallbackFunction = GetJsonCallbackFunction(request) 
             };
-            
+
+            // this doesn't work unfortunately
+            //formatter.SerializerSettings = GlobalConfiguration.Configuration.Formatters.JsonFormatter.SerializerSettings;
+
+            // You have to reapply any JSON.NET default serializer Customizations here    
+            formatter.SerializerSettings.Converters.Add(new StringEnumConverter());
+            formatter.SerializerSettings.Formatting = Newtonsoft.Json.Formatting.Indented;
 
             return formatter;
         }
         
+
         public override Task WriteToStreamAsync(Type type, object value, 
                                         Stream stream, 
                                         HttpContent content, 
                                         TransportContext transportContext)
         {                                     
-            if (!string.IsNullOrEmpty(JsonpCallbackFunction))
-            {
-                return Task.Factory.StartNew(() =>
-                {
-                    using (var writer = new StreamWriter(stream))
-                    {
-                        writer.Write( JsonpCallbackFunction + "(");
-                        writer.Flush();
-
-                        base.WriteToStreamAsync(type, value, stream, content,
-                                                transportContext).Wait();
-
-                        writer.Write(")");
-                        writer.Flush();
-                    }
-                });
-            }
-            else
-            {
+            if (string.IsNullOrEmpty(JsonpCallbackFunction))
                 return base.WriteToStreamAsync(type, value, stream, content, transportContext);
+
+            StreamWriter writer = null;
+
+            // write the pre-amble
+            try
+            {
+                writer = new StreamWriter(stream);
+                writer.Write(JsonpCallbackFunction + "(");
+                writer.Flush();
             }
+            catch (Exception ex)
+            {
+                try
+                {
+                    if (writer != null)
+                        writer.Dispose();
+                }
+                catch { }
+
+                var tcs = new TaskCompletionSource<object>();
+                tcs.SetException(ex);
+                return tcs.Task;
+            }
+
+            return base.WriteToStreamAsync(type, value, stream, content, transportContext)
+                       .ContinueWith( innerTask =>                
+                            {
+                                if (innerTask.Status == TaskStatus.RanToCompletion)
+                                {
+                                    writer.Write(")");
+                                    writer.Flush();                                    
+                                }
+
+                            },TaskContinuationOptions.ExecuteSynchronously)                        
+                        .ContinueWith( innerTask =>
+                            {
+                                writer.Dispose();
+                                return innerTask;
+
+                            },TaskContinuationOptions.ExecuteSynchronously)
+                        .Unwrap();            
         }
 
         /// <summary>
