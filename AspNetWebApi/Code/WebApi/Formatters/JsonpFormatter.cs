@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Net.Http;
 using Newtonsoft.Json.Converters;
-using System.Web.Http;
 
 namespace Westwind.Web.WebApi
 {
@@ -51,11 +50,11 @@ namespace Westwind.Web.WebApi
         /// <param name="request"></param>
         /// <param name="mediaType"></param>
         /// <returns></returns>
-        public override MediaTypeFormatter GetPerRequestFormatterInstance(Type type, System.Net.Http.HttpRequestMessage request, MediaTypeHeaderValue mediaType)
-        {       
-            var formatter = new JsonpFormatter() 
-            {                 
-                JsonpCallbackFunction = GetJsonCallbackFunction(request) 
+        public override MediaTypeFormatter GetPerRequestFormatterInstance(Type type, HttpRequestMessage request, MediaTypeHeaderValue mediaType)
+        {
+            var formatter = new JsonpFormatter()
+            {
+                JsonpCallbackFunction = GetJsonCallbackFunction(request)
             };
 
             // this doesn't work unfortunately
@@ -101,22 +100,17 @@ namespace Westwind.Web.WebApi
             }
 
             return base.WriteToStreamAsync(type, value, stream, content, transportContext)
-                       .ContinueWith( innerTask =>                
+                       .ContinueWith(innerTask =>
                             {
                                 if (innerTask.Status == TaskStatus.RanToCompletion)
                                 {
                                     writer.Write(")");
-                                    writer.Flush();                                    
+                                    writer.Flush();
                                 }
-
-                            },TaskContinuationOptions.ExecuteSynchronously)                        
-                        .ContinueWith( innerTask =>
-                            {
                                 writer.Dispose();
                                 return innerTask;
-
-                            },TaskContinuationOptions.ExecuteSynchronously)
-                        .Unwrap();            
+                            }, TaskContinuationOptions.ExecuteSynchronously)
+                            .Unwrap();
         }
 
         /// <summary>
