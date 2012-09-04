@@ -1,5 +1,5 @@
 #Getting Started with ASP.NET Web API
-[Sample code for Code Magazine Article](http://code-magazine.com/Article.aspx?quickid=1206081)
+[Sample code for Code Magazine Article](http://www.west-wind.com/weblog/posts/2012/Aug/21/An-Introduction-to-ASPNET-Web-API)
 
 This project is a small example that demonstrates some of the core features  of the ASP.NET Web API. It contains the code samples referenced in the article above.
 
