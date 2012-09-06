@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Web.Routing;
 using System.Web.Http;
-using System.Globalization;
+using System.Linq;
 using Westwind.Web.WebApi;
-using Newtonsoft.Json.Converters;
+
+using System.Web.Http.Controllers;
+using System.Net.Http;
+using System.Diagnostics;
 //using Westwind.Web.WebApi;
 
 namespace AspNetWebApi
@@ -11,8 +14,8 @@ namespace AspNetWebApi
     public class Global : System.Web.HttpApplication
     {
         protected void Application_Start(object sender, EventArgs e)
-        {           
-            
+        {
+
 
             // Display errors in response locally
             GlobalConfiguration
@@ -20,6 +23,8 @@ namespace AspNetWebApi
                    .IncludeErrorDetailPolicy = IncludeErrorDetailPolicy.Never;
 
             RegisterApiRoutes(GlobalConfiguration.Configuration);
+
+            //Debugger.Break();
 
             // WebApi Configuration to hook up formatters and message handlers
             // optional
@@ -108,20 +113,57 @@ namespace AspNetWebApi
             // configure stock formatter
             //config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new StringEnumConverter());
             //config.Formatters.JsonFormatter.SerializerSettings.Formatting = Newtonsoft.Json.Formatting.Indented;
-            
+
             // Add a custom JsonP converter which effectively replaces the default JSON formatter     
             // you can configue the custom formatter in it's creation code
             config.Formatters.Insert(0, new JsonpFormatter());
-
             var cons = config.Formatters.JsonFormatter.SerializerSettings.Converters;
 
             // Add the exception filter
             //GlobalConfiguration.Configuration.Filters.Add(new UnhandledExceptionFilter());
             //config.Filters.Add(new UnhandledExceptionFilter());
 
+
+            config.ParameterBindingRules.Insert(0,
+                (HttpParameterDescriptor descriptor) =>
+                {
+                    var supportedMethods = descriptor.ActionDescriptor.SupportedHttpMethods;
+                    if (supportedMethods.Contains(HttpMethod.Post) || supportedMethods.Contains(HttpMethod.Put))
+                    {
+                        var types = new Type[] { typeof(string), typeof(int), typeof(decimal), typeof(double), typeof(bool), typeof(DateTime) };
+
+                        if (types.Where(typ => typ == descriptor.ParameterType).Count() > 0)
+                            return new SimplePostVariableParameterBinding(descriptor);
+                    }
+
+                    // let the default bindings do their work
+                    return null;
+
+                });
+
+            
+            //GetCustomParameterBinding);
         }
-        
+
+        public static HttpParameterBinding SimpleFormVarBinding(HttpParameterDescriptor descriptor)
+        {
+            var supportedMethods = descriptor.ActionDescriptor.SupportedHttpMethods;
+            if (supportedMethods.Contains(HttpMethod.Post) || supportedMethods.Contains(HttpMethod.Put))
+            {
+                var types = new Type[] { typeof(string), typeof(int), typeof(decimal), typeof(double), typeof(bool), typeof(DateTime) };
+
+                if (types.Where(typ => typ == descriptor.ParameterType).Count() > 0)
+                    return new SimplePostVariableParameterBinding(descriptor);
+            }
+
+            // let the default bindings do their work
+            return null;
+        }
+
+
     }
+
+        
 
 
 }
