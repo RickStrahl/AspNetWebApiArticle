@@ -1,17 +1,16 @@
 ﻿/// <reference path="jquery.js" />
 /*
 ww.jQuery.js  
-Version 1.06 - 4/18/2012
+Version 1.07 - 8/31/2012
 West Wind jQuery plug-ins and utilities
 
-(c) 2008-2011 Rick Strahl, West Wind Technologies 
+(c) 2008-2012 Rick Strahl, West Wind Technologies 
 www.west-wind.com
 
 Licensed under MIT License
 http://en.wikipedia.org/wiki/MIT_License
 */
 (function ($) {
-
     HttpClient = function (opt) {
         var _I = this;
 
@@ -35,7 +34,8 @@ http://en.wikipedia.org/wiki/MIT_License
             errorHandler = errorHandler || _I.errorHandler;
 
             $.ajax(
-           { url: url,
+           {
+               url: url,
                data: postData,
                type: (postData ? "POST" : _I.method),
                processData: false,  // always process on our own!
@@ -138,7 +138,8 @@ http://en.wikipedia.org/wiki/MIT_License
             var url = _I.serviceUrl + method;
 
             var http = new HttpClient(
-                            { contentType: "application/json",
+                            {
+                                contentType: "application/json",
                                 accepts: "application/json,text/*",
                                 method: _I.method,
                                 evalResult: true,
@@ -181,7 +182,8 @@ http://en.wikipedia.org/wiki/MIT_License
                         data["Parm" + (x + 1).toString()] = JSON.stringify(parameters[x]);
                     }
                 }
-                $.extend(data, { CallbackMethod: methodName,
+                $.extend(data, {
+                    CallbackMethod: methodName,
                     CallbackParmCount: parmCount,
                     __WWEVENTCALLBACK: _I.controlId
                 });
@@ -390,7 +392,8 @@ http://en.wikipedia.org/wiki/MIT_License
         /// Options map: forceAbsolute, container, completed
         /// </param>
         /// <returns type="jQuery" />
-        var opt = { forceAbsolute: false,
+        var opt = {
+            forceAbsolute: false,
             container: window,    // selector of element to center in
             completed: null,
             centerOnceOnly: false
@@ -447,7 +450,7 @@ http://en.wikipedia.org/wiki/MIT_License
     }
 
     // sums up CSS property values
-    function sumDimensions($el, dims) {
+    sumDimensions = function ($el, dims) {
         // Opera returns -1 for missing min/max width, turn into 0
         var sum = 0;
         for (var i = 1; i < arguments.length; i++)
@@ -455,15 +458,56 @@ http://en.wikipedia.org/wiki/MIT_License
         return sum;
     }
 
+    $.fn.makeAbsolute = function (rebase) {
+        /// <summary>
+        /// Makes an element absolute
+        /// </summary>    
+        /// <param name="rebase" type="boolean">forces element onto the body tag. Note: might effect rendering or references</param>    
+        /// </param>    
+        /// <returns type="jQuery" /> 
+        return this.each(function () {
+            var el = $(this);
+            var pos = el.position();
+            el.css({
+                position: "absolute",
+                marginLeft: 0, marginTop: 0,
+                top: pos.top, left: pos.left
+            });
+            if (rebase)
+                el.remove().appendTo("body");
+        });
+    }
+
     $.fn.stretchToBottom = function (options) {
+        /// <summary>
+        /// Stretches an element to the bottom of another element like window
+        /// to provide 100% bottom fill to simulate height: 100%.
+        /// </summary>    
+        /// <param name="options" type="object">
+        /// 1) jQuery Selector of the Container
+        /// 2) Options map:
+        ///      container: jQuery selector for container element
+        ///      autoResize: when true resizes as window resizes
+        ///      bottomOffset: manual override for offset from the bottom
+        /// </param>    
+        /// <returns type="jQuery" /> 
         var opt = {
             container: $(window),
-            bottomOffset: 0
+            bottomOffset: 0,
+            autoResize: false
         }
         if (options && options.length)
             opt.container = options;
         else
             $.extend(opt, options);
+
+        if (opt.autoResize == true) {
+            $els = this;
+            $(opt.container).resize(function () {
+                console.log(opt.container);
+                $els.stretchToBottom({ container: opt.container, autoResize: false });
+            });
+        }
 
         return this.each(function () {
             $el = $(this);
@@ -474,31 +518,31 @@ http://en.wikipedia.org/wiki/MIT_License
             var bott = $(window).innerHeight();
             var top = parseInt($el.css("top"));
             var height = 0;
-            if (opt.container[0] != window) {
-                var ds = sumDimensions($cont, "borderTopWidth", "borderBottomWidth", "marginBottom", "paddingBottom", "paddingTop") +
-                         sumDimensions($el, "borderTopWidth", "borderBottomWidth", "marginBottom", "marginTop");
+            if ($cont[0] != window) {
+                var ds = sumDimensions($cont, "borderTopWidth", "borderBottomWidth", "paddingBottom", "paddingTop") +
+                         sumDimensions($el, "borderTopWidth", "borderBottomWidth", "marginBottom", "marginTop", "paddingBottom", "paddingTop");
                 ds = ds ? ds : 1;
-                bott = $cont.offset().top + $cont.innerHeight();
-                height = Math.floor(bott - top - Math.ceil(ds) - opt.bottomOffset);
-                //console.log("*id: " + this.id + "  bott: " + bott + " Top: " + top + " ds: " + ds + "  offset: " + opt.bottomOffset + " height: " + height);
+                bott = $cont.offset().top + $cont.outerHeight();
+                height = bott - top - Math.ceil(ds) - opt.bottomOffset;
+                //console.log("*id: " + this.id + "  bott: " + bott + " Top: " + top + " - " + $cont.offset().top  + " ds: " + ds + "  offset: " + opt.bottomOffset + " height: " + height + " cont height:" + $cont.innerHeight() + " " + $cont.outerHeight());
             }
             else {
                 var ds = sumDimensions($el, "borderTopWidth", "borderBottomWidth", "marginBottom", "marginTop");
                 height = bott - top - Math.ceil(ds) - opt.bottomOffset;
-                //console.log("id: " + this.id + "  bott: " + bott + " Top: " + top + " ds: " + ds + "  offset: " + opt.bottomOffset + " height: " + height);
+                //console.log("id: " + this.id + "  bott: " + bott + " Top: " + top + " - " + $cont.offset().top + " ds: " + ds + "  offset: " + opt.bottomOffset + " height: " + height);
             }
 
             $el.css("position", oabs).css("height", height);
         });
     };
 
-
     $.fn.moveToMousePosition = function (evt, options) {
         var opt = { left: 0, top: 0 };
         $.extend(opt, options);
         return this.each(function () {
             var el = $(this);
-            el.css({ left: evt.pageX + opt.left,
+            el.css({
+                left: evt.pageX + opt.left,
                 top: evt.pageY + opt.top,
                 position: "absolute"
             });
@@ -530,7 +574,8 @@ http://en.wikipedia.org/wiki/MIT_License
         if (typeof action == "object")
             options = action;
 
-        var opt = { offset: 5,
+        var opt = {
+            offset: 5,
             color: "#636363",
             opacity: 0.45,
             callback: null,
@@ -602,7 +647,8 @@ http://en.wikipedia.org/wiki/MIT_License
 
             var pos = el.position();
             sh.show()
-          .css({ position: "absolute",
+          .css({
+              position: "absolute",
               width: el.outerWidth(),
               height: el.outerHeight(),
               opacity: opt.opacity,
@@ -631,7 +677,8 @@ http://en.wikipedia.org/wiki/MIT_License
                  function (w, i) {
                      if (el.is(":visible")) {
                          var pos = el.position();
-                         sh.css({ position: "absolute",
+                         sh.css({
+                             position: "absolute",
                              opacity: el.css("opacity") * opt.opacity,
                              width: el.outerWidth(),
                              height: el.outerHeight(),
@@ -655,7 +702,8 @@ http://en.wikipedia.org/wiki/MIT_License
     }
 
     $.fn.tooltip = function (msg, timeout, options) {
-        var opt = { cssClass: "",
+        var opt = {
+            cssClass: "",
             isHtml: false,
             shadowOffset: 2,
             onRelease: null
@@ -719,7 +767,8 @@ http://en.wikipedia.org/wiki/MIT_License
                 if (Width > 400)
                     Width = 400;
 
-                tt.css({ left: Left,
+                tt.css({
+                    left: Left,
                     top: Top,
                     width: Width
                 });
@@ -768,7 +817,8 @@ http://en.wikipedia.org/wiki/MIT_License
             var el$ = $(this);
             var fnc = function () { __watcher.call(_t, id) };
 
-            var data = { id: id,
+            var data = {
+                id: id,
                 props: props.split(","),
                 vals: [props.split(",").length],
                 func: func,
@@ -845,7 +895,8 @@ http://en.wikipedia.org/wiki/MIT_License
 
 
     $.fn.listSetData = function (items, options) {
-        var opt = { noClear: false,        // don't clear the list first if true
+        var opt = {
+            noClear: false,        // don't clear the list first if true
             dataValueField: null,          // optional value field for object lists
             dataTextField: null
         };
@@ -1084,7 +1135,7 @@ http://en.wikipedia.org/wiki/MIT_License
                 }
             }
             catch (e)
-        { window.status = 'Moving of window failed: ' + e.message; }
+            { window.status = 'Moving of window failed: ' + e.message; }
         }
         this.showIFrame = function (Url) {
             _I.busy = false;
@@ -1226,12 +1277,13 @@ http://en.wikipedia.org/wiki/MIT_License
         dl.modalDialog({ dialogHandler: handler, headerId: "_MBOXHEADER", contentId: "_MBOXCONTENT" },
                    msg, header, isHtml)
           .draggable({ handle: $("#_MBOX .dialog-header") }).shadow()
-          .closable({ closeHandler:
-              function () {
-                  var close = true;
-                  if (handler) close = handler.call(this);
-                  if (close) $("#_MBOX").modalDialog("hide");
-              }
+          .closable({
+              closeHandler:
+                  function () {
+                      var close = true;
+                      if (handler) close = handler.call(this);
+                      if (close) $("#_MBOX").modalDialog("hide");
+                  }
           });
     }
     opaqueOverlay = function (opt, p2) {
@@ -1409,7 +1461,8 @@ http://en.wikipedia.org/wiki/MIT_License
     }
 
     $.fn.closable = function (options) {
-        var opt = { handle: null,
+        var opt = {
+            handle: null,
             closeHandler: null,
             cssClass: "closebox",
             imageUrl: null,
@@ -1450,7 +1503,8 @@ http://en.wikipedia.org/wiki/MIT_License
         if (this.length < 1)
             return;
         var oldPadding = "0px";
-        var def = { editClass: null,
+        var def = {
+            editClass: null,
             saveText: "Save",
             saveHandler: null
         };
@@ -1503,7 +1557,8 @@ http://en.wikipedia.org/wiki/MIT_License
             return this;
 
         var oldPadding = "0px";
-        var def = { editClass: null,
+        var def = {
+            editClass: null,
             saveText: "Save",
             editMode: "text",  // html
             saveHandler: null,
@@ -1559,7 +1614,8 @@ http://en.wikipedia.org/wiki/MIT_License
             });
 
             jButton.click(function (e) {
-                var pass = { text: jEdit.val(),
+                var pass = {
+                    text: jEdit.val(),
                     cleanup: jContent.data("cleanupEditor"),
                     button: jButton,
                     edit: jEdit,
@@ -1867,24 +1923,7 @@ http://en.wikipedia.org/wiki/MIT_License
     $.fn.serializeNoViewState = function () {
         return this.find("input,textarea,select,hidden").not("#__VIEWSTATE,#__EVENTVALIDATION").serialize();
     }
-    $.fn.makeAbsolute = function (rebase) {
-        /// <summary>
-        /// Makes an element absolute
-        /// </summary>    
-        /// <param name="rebase" type="boolean">forces element onto the body tag. Note: might effect rendering or references</param>    
-        /// </param>    
-        /// <returns type="jQuery" /> 
-        return this.each(function () {
-            var el = $(this);
-            var pos = el.position();
-            el.css({ position: "absolute",
-                marginLeft: 0, marginTop: 0,
-                top: pos.top, left: pos.left
-            });
-            if (rebase)
-                el.remove().appendTo("body");
-        });
-    }
+
     if (!this.assert) {
         this.assert = function (cond, msg) {
             if (cond) return;
@@ -1952,7 +1991,7 @@ mind + '}' : '{' + partial.join(',') + '}'; gap = mind; return v;
                 throw new SyntaxError('JSON.parse');
             };
         }
-    } ());
+    }());
 
     if (this.JSON && !this.JSON.parseWithDate) {
         var reISO = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d*)?)Z$/;

@@ -293,9 +293,9 @@ namespace AspNetWebApi
         }
 
         [HttpPost]
-        public string PostMultipleSimpleValues(string name, int value, DateTime date, string action = null)
+        public string PostMultipleSimpleValues(string name, int value, DateTime entered, string action = null)
         {
-            return string.Format("Name: {0}, Value: {1}, Date: {2}, Action: {3}", name, value, date,action);
+            return string.Format("Name: {0}, Value: {1}, Date: {2}, Action: {3}", name, value, entered, action);
         }
 
     }

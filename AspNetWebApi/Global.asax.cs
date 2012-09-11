@@ -120,19 +120,28 @@ namespace AspNetWebApi
             var cons = config.Formatters.JsonFormatter.SerializerSettings.Converters;
 
             // Add the exception filter
-            //GlobalConfiguration.Configuration.Filters.Add(new UnhandledExceptionFilter());
-            //config.Filters.Add(new UnhandledExceptionFilter());
+            GlobalConfiguration.Configuration.Filters.Add(new UnhandledExceptionFilter());
+            config.Filters.Add(new UnhandledExceptionFilter());
 
-
-            config.ParameterBindingRules.Insert(0,
+            GlobalConfiguration.Configuration.ParameterBindingRules
+                .Insert(0,
                 (HttpParameterDescriptor descriptor) =>
                 {
                     var supportedMethods = descriptor.ActionDescriptor.SupportedHttpMethods;
-                    if (supportedMethods.Contains(HttpMethod.Post) || supportedMethods.Contains(HttpMethod.Put))
-                    {
-                        var types = new Type[] { typeof(string), typeof(int), typeof(decimal), typeof(double), typeof(bool), typeof(DateTime) };
 
-                        if (types.Where(typ => typ == descriptor.ParameterType).Count() > 0)
+                    // Only apply this binder on POST and PUT operations
+                    if (supportedMethods.Contains(HttpMethod.Post) || 
+                        supportedMethods.Contains(HttpMethod.Put))
+                    {
+                        var supportedTypes = new Type[] { typeof(string), 
+                                                            typeof(int), 
+                                                            typeof(decimal), 
+                                                            typeof(double), 
+                                                            typeof(bool), 
+                                                            typeof(DateTime) 
+                                                        };
+
+                        if (supportedTypes.Where(typ => typ == descriptor.ParameterType).Count() > 0)
                             return new SimplePostVariableParameterBinding(descriptor);
                     }
 
@@ -140,9 +149,6 @@ namespace AspNetWebApi
                     return null;
 
                 });
-
-            
-            //GetCustomParameterBinding);
         }
 
         public static HttpParameterBinding SimpleFormVarBinding(HttpParameterDescriptor descriptor)

@@ -1,0 +1,65 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <script src="scripts/jquery.min.js"></script>        
+    <script src="scripts/ww.jquery.min.js"></script>
+    <link href="Css/Reset.css" rel="stylesheet" /> 
+    <link href="Css/Standard.css" rel="stylesheet" />    
+</head>
+<body>
+    <h1>Mapping Multiple POST Variables to Method Parameters</h1>
+    <div class="toolbarcontainer">
+      <a href="default.htm" class="hoverbutton"><img src="css/images/home.gif" /> Back to Samples</a>
+      <a href="MulitplePostVariables.htm" class="hoverbutton"><img src="css/images/refresh.gif" /> Refresh</a>
+    </div>
+    <div class="descriptionheader">
+        This example posts multiple url encoded POST variables to a method on the server
+        that accepts multiple simple parameters. Simple test to check operation of the
+        SimplePostVariableParameterBinding.
+    </div>
+
+    <div class="containercontent"> 
+    
+        <form>
+            Name: <input type="name" name="name" value="Rick" />
+            Value: <input type="value" name="value" value="12" />
+            Entered: <input type="entered" name="entered" value="12/01/2011" />
+            <input type="button" id="btnSend" value="Send" />
+        </form>
+
+    </div>
+    <script type="text/javascript">
+        $("#btnSend").click(function () {
+
+            $.ajax(
+	            {
+	                url: "samples/PostMultipleSimpleValues?action=kazam",
+	                type: "POST",
+	                data: $("form").serialize(),
+	                processData: false,
+	                success: function (result) {
+	                    // reload list of albums
+	                    showStatus(result);
+	                },
+	                error: function (xhr, status, p3, p4) {
+	                    var err = "Error";
+	                    if (xhr.responseText && xhr.responseText[0] == "{")
+	                        err = JSON.parse(xhr.responseText).message;
+	                    alert(err);
+	                }
+	            });
+
+                // simpler but no explicit error handling
+                //$.post("samples/PostMultipleSimpleValues?action=kazam",
+                //        //{ name: "Rick", value: 1, entered: "12/01/2012" },
+                //        $("form").serialize(),
+                //        function (result) {                    
+                //            showStatus(result);
+                //        });
+                //});
+        });
+        
+    </script>
+</body>
+</html>

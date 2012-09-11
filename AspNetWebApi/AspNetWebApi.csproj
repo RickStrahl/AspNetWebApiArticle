@@ -83,6 +83,7 @@
     <Content Include="Css\GetAlbums.css" />
     <Content Include="GetAlbums.htm" />
     <Content Include="GetAlbums.js" />
+    <Content Include="MulitplePostVariables.htm" />
     <Content Include="HttpClient_Requests.aspx" />
     <Content Include="Images\Load16.png" />
     <Content Include="Css\Images\close.gif" />
@@ -154,7 +155,7 @@
     <Compile Include="Code\WebApi\Formatters\JsonpFormatter.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Code\WebApi\SimplePostVariableParameterBinding.cs" />
+    <Compile Include="Code\WebApi\Binders\SimplePostVariableParameterBinding.cs" />
     <Compile Include="Controllers\AlbumApiController.cs" />
     <Compile Include="Controllers\AlbumRpcApiController.cs">
       <SubType>Code</SubType>
