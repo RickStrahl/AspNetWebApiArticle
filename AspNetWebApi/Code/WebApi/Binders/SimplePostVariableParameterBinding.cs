@@ -68,6 +68,44 @@ public class SimplePostVariableParameterBinding : HttpParameterBinding
     }
 
 
+    /// <summary>
+    /// Method that implements parameter binding hookup to the global configuration object's
+    /// ParameterBindingRules collection delegate.
+    /// 
+    /// This routine filters based on POST/PUT method status and simple parameter
+    /// types.
+    /// </summary>
+    /// <example>
+    /// GlobalConfiguration.Configuration.
+    ///       .ParameterBindingRules
+    ///       .Insert(0,SimplePostVariableParameterBinding.HookupParameterBinding);
+    /// </example>    
+    /// <param name="descriptor"></param>
+    /// <returns></returns>
+    public static HttpParameterBinding HookupParameterBinding(HttpParameterDescriptor descriptor)
+    {
+        var supportedMethods = descriptor.ActionDescriptor.SupportedHttpMethods;
+
+        // Only apply this binder on POST and PUT operations
+        if (supportedMethods.Contains(HttpMethod.Post) ||
+            supportedMethods.Contains(HttpMethod.Put))
+        {
+            var supportedTypes = new Type[] { typeof(string), 
+                                                typeof(int), 
+                                                typeof(decimal), 
+                                                typeof(double), 
+                                                typeof(bool), 
+                                                typeof(DateTime) 
+                                            };
+
+            if (supportedTypes.Where(typ => typ == descriptor.ParameterType).Count() > 0)
+                return new SimplePostVariableParameterBinding(descriptor);
+        }
+
+        return null;
+    }
+
+
     private object StringToType(string stringValue)
     {
         object value = null;
