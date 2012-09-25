@@ -11,6 +11,7 @@ using System.Web.Security;
 using System.Web;
 using System.Net.Http.Headers;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace AspNetWebApi
 {
@@ -292,10 +293,36 @@ namespace AspNetWebApi
             return newAlbum;
         }
 
-        [HttpPost]
+        [HttpPost,HttpGet]
         public string PostMultipleSimpleValues(string name, int value, DateTime entered, string action = null)
         {
             return string.Format("Name: {0}, Value: {1}, Date: {2}, Action: {3}", name, value, entered, action);
+        }
+
+        [HttpPost, HttpGet]
+        public string PostMultipleSimpleValuesJson(NameValueEntered nve, string action = null)
+        {
+            return string.Format("Name: {0}, Value: {1}, Date: {2}, Action: {3}", nve.name, nve.value, nve.entered, action);
+        }
+
+        [HttpPost]
+        public Task<string> PostFileValues()
+        {
+            string root = HttpContext.Current.Server.MapPath("~/");
+            var provider = new MultipartFormDataStreamProvider(root);
+
+            Task<string> res = Request.Content
+                    .ReadAsMultipartAsync(provider)
+                    .ContinueWith(itask =>
+                    {
+                        var count = provider.FileData.Count;
+                        return count + " files";
+                    });
+            return res;                         
+        }
+
+        private struct AsyncVoid
+        {
         }
 
     }
@@ -326,5 +353,12 @@ namespace AspNetWebApi
         public string Result { get; set; }
         public bool IsSuccess { get; set; }
         public string ErrorMessage { get; set; }
+    }
+
+    public class NameValueEntered
+    {
+        public string name { get; set; }
+        public int value { get; set; }
+        public DateTime entered { get; set; }
     }
 }

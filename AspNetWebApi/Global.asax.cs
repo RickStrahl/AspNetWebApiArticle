@@ -117,14 +117,17 @@ namespace AspNetWebApi
             // Add a custom JsonP converter which effectively replaces the default JSON formatter     
             // you can configue the custom formatter in it's creation code
             config.Formatters.Insert(0, new JsonpFormatter());
-            var cons = config.Formatters.JsonFormatter.SerializerSettings.Converters;
+            
+            //var cons = config.Formatters.JsonFormatter.SerializerSettings.Converters;  
 
+            //xconfig.Formatters.XmlFormatter.UseXmlSerializer = true;
+            
             // Add the exception filter
             config.Filters.Add(new UnhandledExceptionFilter());
 
             // Attach simple post variable binding
             config.ParameterBindingRules
-                  .Insert(0,SimplePostVariableParameterBinding.HookupParameterBinding);
+                  .Insert(0, SimplePostVariableParameterBinding.HookupParameterBinding);
         }
 
     }
