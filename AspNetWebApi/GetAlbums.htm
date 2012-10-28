@@ -17,7 +17,7 @@
     <h1>Album Display Demo</h1>
 
     <div class="toolbarcontainer">
-      <a href="./default.htm" class="hoverbutton"><img src="css/images/home.gif" /> Back to Samples</a>
+      <a href="~/default.htm" class="hoverbutton"><img src="css/images/home.gif" /> Back to Samples</a>
       <a href="#" id="btnLoadData" class="hoverbutton"><img src="images/load16.png" /> Load Albums</a>
       <a href="#" id="btnSendAlbum" class="hoverbutton"><img src="css/images/new.gif" /> Add PowerAge Album</a>
       <a href="#" id="btnAddNewAlbum" class="hoverbutton"><img src="css/images/new.gif" /> Add new Album</a>
@@ -26,18 +26,21 @@
     
     <div id="divMainContainer" style="min-width: 960px;">
 
-        <div id="divAlbumContainer" class="frame" style="width: 440px;float: left;" >    
+        <div id="divAlbumContainer" class="frame" style="width: 400px;float: left;" >    
             <div class="frame-header">Albums</div>
 
             <div data-bind="foreach: albums" class="scrollbox" style="height: 300px;">
                 <div class="album" data-bind="attr: {'data-id': AlbumName}" >
                     <img class="removeimage rightalign hoverbutton" src="Css/Images/Remove.gif" />
-                    <img data-bind="attr: {src:AlbumImageUrl}" style="width: 70px; float: right; margin-right: 10px;" />
-                    <div style="font-weight: bold">
+                    <img class="list-image" data-bind="attr: {src:AlbumImageUrl}"  />
+                    <div style="font-weight: bold;margin: 5px 0;">
                         <a href="#" data-bind="text:AlbumName,attr: {'data-id': AlbumName}"  class="albumlink"  ></a>
                     </div>
-                    <div data-bind="text:Artist" class="smalltext"></div>
-                    <div class="smalltext">released: <span data-bind="text: YearReleased"></span></div>            
+                    <div class="smalltext" style="color: darkblue;">
+                        <span data-bind="text:Artist" ></span>
+                        (<span data-bind="text: YearReleased"></span>)
+                    </div>                                         
+
                 </div>    
             </div>
             <div id="divDialogStatus" class="dialog-statusbar">Ready</div>            
@@ -49,21 +52,21 @@
             <div class="frame-header">Album Detail</div>
 
             <div class="dialog-content gridhighlight">                          
-                <img data-bind="if:AlbumImageUrl,attr: { src: AlbumImageUrl }" 
-                     style="height: 100px;float: right; margin: 10px;" />
+                <img class="album-image" data-bind="if:AlbumImageUrl,attr: { src: AlbumImageUrl }" />
 
-                <h3 class="album-name" data-bind="text: AlbumName"></h3> 
+                <div class="album-name" data-bind="text: AlbumName"></div> 
                 <div class="album-artist" data-bind="text: Artist"></div>       
                 <div class="smalltext" data-bind="text: 'realeased in: ' + YearReleased()"></div>
                 <div class="smalltext"><a href="" data-bind="attr:{href:AmazonUrl},if:AmazonUrl" target="_blank">Buy on Amazon</a></div>
+                <div data-bind="text: Description" class="album-description-box"></div>
                 <div class="clearfix">&nbsp;</div>
+                
                 <div data-bind="foreach: Songs" style="padding: 10px;" class="scrollbox" >
                     <div class="albumsong smalltext" style="padding: 5px; border-bottom: 1px dashed Steelblue">
                         <div data-bind="text: SongLength" style="float:right"></div>
                         <div data-bind="text: SongName"></div>                
                     </div>
                 </div>
-
             </div>        
         </div>
 

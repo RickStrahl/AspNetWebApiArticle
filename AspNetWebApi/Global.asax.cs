@@ -17,11 +17,6 @@ namespace AspNetWebApi
         {
 
 
-            // Display errors in response locally
-            GlobalConfiguration
-                   .Configuration
-                   .IncludeErrorDetailPolicy = IncludeErrorDetailPolicy.Never;
-
             RegisterApiRoutes(GlobalConfiguration.Configuration);
 
             //Debugger.Break();
@@ -91,18 +86,13 @@ namespace AspNetWebApi
 
         public static void RegisterApis(HttpConfiguration config)
         {
+            // Display errors in response locally
+            GlobalConfiguration
+                   .Configuration
+                   .IncludeErrorDetailPolicy = IncludeErrorDetailPolicy.Never;
+            
             var formatters = config.Formatters;
-#if false
-            // remove default Xml handler
-            var matches = config.Formatters
-                                .Where(f => f.SupportedMediaTypes
-                                             .Where(m => m.MediaType.ToString() == "application/xml" ||
-                                                         m.MediaType.ToString() == "text/xml")
-                                             .Count() > 0)
-                                .ToList() ;
-            foreach (var match in matches)
-                config.Formatters.Remove(match);    
-#endif
+
             // Add JavaScriptSerializer  formatter instead - add at top to make default
             //config.Formatters.Insert(0, new JavaScriptSerializerFormatter());
 
@@ -120,7 +110,7 @@ namespace AspNetWebApi
             
             //var cons = config.Formatters.JsonFormatter.SerializerSettings.Converters;  
 
-            //xconfig.Formatters.XmlFormatter.UseXmlSerializer = true;
+            //config.Formatters.XmlFormatter.UseXmlSerializer = true;            
             
             // Add the exception filter
             config.Filters.Add(new UnhandledExceptionFilter());

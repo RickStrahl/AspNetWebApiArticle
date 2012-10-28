@@ -3,7 +3,7 @@
 /// <reference path="scripts/knockout-2.0.0.js" />
 /// <reference path="scripts/knockout-mapping.js" />
 
-globals = {    
+page = {
     // display view for a single album instance
     albumView: null,
     // display view for a album array
@@ -12,10 +12,14 @@ globals = {
     albumEditView: null,
     // flag that determines whether we're on the first bind
     editalbumFirstBind: true
-};
-page = {};
+}
 
 $(document).ready(function () {
+    page.initialize();
+    page.hookupEvents();    
+});
+
+page.initialize = function () {   
     // status bar configuration (ww.jquery.js)
     showStatus({ autoHide: true });
 
@@ -24,7 +28,8 @@ $(document).ready(function () {
 
     // load albums when page loads
     page.loadAlbums(true);
-
+}
+page.hookupEvents = function() {
     // reload data from server
     $("#btnLoadData").click(page.loadAlbums);
 
@@ -45,24 +50,21 @@ $(document).ready(function () {
     $("#btnSaveAlbum").click(page.saveAlbum)
 
     $("#btnReloadAlbums").click(page.reloadAlbumsClick);
-});
-
-
-
+}
 page.loadAlbums = function (showFirst) {
 
-
     $.getJSON("albums/", function (albums) {
-        if (!globals.albumsView) {
+        if (!page.albumsView) {
             // first time bind
-            globals.albumsView = ko.mapping.fromJS(albums);
-            var view = { albums: globals.albumsView };
+            page.albumsView = ko.mapping.fromJS(albums);
+
+            var view = { albums: page.albumsView };
             ko.applyBindings(view, $("#divAlbumContainer")[0]);
         }
         else
-            globals.albumsView = ko.mapping.fromJS(albums, globals.albumsView);
+            ko.mapping.fromJS(albums, page.albumsView);
 
-        var view = { albums: globals.albumsView };
+        var view = { albums: page.albumsView };
 
         // clear out list and make template visible
         var $albums = $(".album");
@@ -83,12 +85,12 @@ page.loadAlbum = function (id) {
 
     $.getJSON("albums/" + encodeURI(id), function (album) {
         var $dialog = $("#divAlbumDialog");
-        if (!globals.albumView) {
-            globals.albumView = ko.mapping.fromJS(album);
-            ko.applyBindings(globals.albumView, $dialog[0]);
+        if (!page.albumView) {
+            page.albumView = ko.mapping.fromJS(album);
+            ko.applyBindings(page.albumView, $dialog[0]);
         }
         else
-            ko.mapping.fromJS(album, globals.albumView);
+            ko.mapping.fromJS(album, page.albumView);
 
     });
 }
@@ -117,10 +119,10 @@ page.newAlbumDialog = function () {
     var data = page.getEmptyAlbum();
 
     // map to ko view model
-    if (globals.editalbumFirstBind) {
+    if (page.editalbumFirstBind) {
         albumEditView = ko.mapping.fromJS(data);
         ko.applyBindings(albumEditView, $("#divAddAlbumDialog")[0]);
-        globals.editalbumFirstBind = false;
+        page.editalbumFirstBind = false;
     }
     else
         ko.mapping.fromJS(data, albumEditView);
@@ -165,7 +167,7 @@ page.saveStaticAlbum = function() {
         data: JSON.stringify(album),
         processData: false,
         beforeSend: function (xhr) {
-            // not required since JSON is default output
+            // not really required since JSON is default output format
             xhr.setRequestHeader("Accept", "application/json");
         },
         success: function (result) {
@@ -173,7 +175,7 @@ page.saveStaticAlbum = function() {
             page.loadAlbums();
         },
         error: function (xhr, status, p3, p4) {
-            var err = "Error";
+            var err = "An error occurred while sending the new album. Unknown error.";
             if (xhr.responseText && xhr.responseText[0] == "{")
                 err = JSON.parse(xhr.responseText).message;
             alert(err);

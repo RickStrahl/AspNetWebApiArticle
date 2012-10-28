@@ -11,6 +11,18 @@
 {
     background: khaki;
 }
+.list-image {
+    width: 70px; 
+    float: right; 
+    margin-right: 10px;
+    border-radius: 3px;
+    box-shadow: #535353 1px 1px 3px;
+}
+.list-description{
+    font-size: 0.7em;
+    margin-top: 4px;
+    overflow: hidden;
+}
 .removeimage
 {
     opacity: .90;
@@ -28,12 +40,37 @@
 {
     width: 300px;
 }
+.album-name{
+    font-size: 1.35em;
+    font-weight: bold;
+    color: steelblue;  
+    margin-top: 5px;  
+}
 .album-artist
 {
     color: Brown;       
     font-weight: bold;
     margin: 5px 0;
 }
+.album-image
+{
+    height: 140px;float: right; margin: 10px;
+    border-radius: 4px;
+    box-shadow: #535353 2px 2px 4px;      
+}
+.album-description-box {
+    border-radius: 3px;
+    box-shadow: #535353 2px 2px 4px;
+    float: left;
+    border: solid 1px steelblue;
+    background: lightsteelblue;
+    padding: 8px;
+    font-size: 0.8em;
+    width: 285px;
+    margin: 12px 0;
+}
+
+
 .song-container
 {
     overflow-y: auto;

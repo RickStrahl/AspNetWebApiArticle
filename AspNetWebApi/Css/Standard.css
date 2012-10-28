@@ -58,13 +58,19 @@ th
 	text-align: center;
 }
 a 
-{ color:#003399; }
+{ 
+    color:#003399; 
+    text-decoration: none;
+
+}
 a:visited
 {
 	color: maroon;
 }
 a:hover 
-{ color:maroon;}
+{ color:maroon;
+  text-decoration: underline;
+}
 small, .smalltext,.small
 {
     font-size: 8.25pt;

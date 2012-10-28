@@ -305,21 +305,23 @@ namespace AspNetWebApi
             return string.Format("Name: {0}, Value: {1}, Date: {2}, Action: {3}", nve.name, nve.value, nve.entered, action);
         }
 
-        [HttpPost]
-        public Task<string> PostFileValues()
-        {
-            string root = HttpContext.Current.Server.MapPath("~/");
-            var provider = new MultipartFormDataStreamProvider(root);
+[HttpPost]
+public Task<string> PostFileValues()
+{
+    string root = HttpContext.Current.Server.MapPath("~/");
+    var provider = new MultipartFormDataStreamProvider(root);
 
-            Task<string> res = Request.Content
-                    .ReadAsMultipartAsync(provider)
-                    .ContinueWith(itask =>
-                    {
-                        var count = provider.FileData.Count;
-                        return count + " files";
-                    });
-            return res;                         
-        }
+    Task<string> res = Request.Content
+            .ReadAsMultipartAsync(provider)
+            .ContinueWith(itask =>
+            {
+                var count = provider.FileData.Count;
+
+                // ... do something with files
+                return count + " files";
+            });
+    return res;                         
+}
 
         private struct AsyncVoid
         {
