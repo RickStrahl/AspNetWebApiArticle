@@ -282,7 +282,7 @@ namespace MusicAlbums
                 YearReleased = 1979,
                 AlbumImageUrl = "https://images-na.ssl-images-amazon.com/images/I/613jNLYLRcL._SL110_.jpg",
                 AmazonUrl = "http://www.amazon.com/gp/product/B0091JCXXS/ref=as_li_ss_tl?ie=UTF8&camp=1789&creative=390957&creativeASIN=B0091JCXXS&linkCode=as2&tag=westwindtechn-20",
-                Description = "Motörhead have never JUST been the best rock'n'roll band in the world. They've never JUST been the loudest. Or the hardest. Or the toughest. Or the bad-ass-est. No...Motörhead are also a lifestyle."
+                Description = "The Subs are the quintessential UK Punk band of the early days, and this live recording captures the feel intensity of the mid-seventies British Punk movement perfectly."
             };
             albums.Add(album);
             album.AddSong("CID", "2:47");

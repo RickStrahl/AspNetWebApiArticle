@@ -27,6 +27,7 @@ namespace MusicAlbums
         public string Description { get; set; }
         [StringLength(80)]
         public string Artist { get; set; }
+        [Range(1970,2099,ErrorMessage="You're too old to listen to this album")]        
         public int YearReleased { get; set; }
         public DateTime Entered { get; set; }
         [StringLength(150)]

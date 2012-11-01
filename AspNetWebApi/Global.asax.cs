@@ -89,9 +89,9 @@ namespace AspNetWebApi
             // Display errors in response locally
             GlobalConfiguration
                    .Configuration
-                   .IncludeErrorDetailPolicy = IncludeErrorDetailPolicy.Never;
+                   .IncludeErrorDetailPolicy = 
+                    IncludeErrorDetailPolicy.Always;            
             
-            var formatters = config.Formatters;
 
             // Add JavaScriptSerializer  formatter instead - add at top to make default
             //config.Formatters.Insert(0, new JavaScriptSerializerFormatter());
@@ -110,6 +110,8 @@ namespace AspNetWebApi
             
             //var cons = config.Formatters.JsonFormatter.SerializerSettings.Converters;  
 
+            //config.Formatters.Remove(config.Formatters.XmlFormatter);
+           
             //config.Formatters.XmlFormatter.UseXmlSerializer = true;            
             
             // Add the exception filter

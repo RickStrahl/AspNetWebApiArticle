@@ -8,6 +8,7 @@ using System.Web.Http;
 using MusicAlbums;
 using System.Net;
 using System.Text;
+using System;
 
 namespace AspNetWebApi.Controllers
 {
@@ -15,7 +16,7 @@ namespace AspNetWebApi.Controllers
     {
 
         public IEnumerable<Album> GetAlbums()
-        {
+        {            
             var albums = AlbumData.Current.OrderBy(alb => alb.Artist);
             return albums;
         }
@@ -42,7 +43,7 @@ namespace AspNetWebApi.Controllers
         //}
 
         public Album GetAlbum(string title)
-        {
+        {                                    
             var album = AlbumData.Current
                             .SingleOrDefault(alb => alb.AlbumName.Contains(title));
             return album;
@@ -50,24 +51,11 @@ namespace AspNetWebApi.Controllers
 
 
         public HttpResponseMessage PostAlbum(Album album)
-        {
+        {            
             if (!this.ModelState.IsValid)
             {
                 // Default Error Result
                 //return Request.CreateErrorResponse(HttpStatusCode.Conflict, ModelState);
-
-                //// my custom error class
-                //var error = new ApiMessageError() { message = "Model is invalid" };
-
-                //// add errors into our client error model for client
-                //foreach(var modelItem in ModelState)
-                //{                
-                //    var modelError = modelItem.Value.Errors.FirstOrDefault();
-                //    if (!string.IsNullOrEmpty(modelError.ErrorMessage))    
-                //        error.errors.Add(modelItem.Key + ": " + modelError.ErrorMessage);
-                //    else
-                //        error.errors.Add(modelItem.Key + ": " + modelError.Exception.Message);
-                //}
 
                 // Customized error handling
                 var error = new ApiMessageError(ModelState);
@@ -88,9 +76,8 @@ namespace AspNetWebApi.Controllers
                 matchedAlbum = album;
 
             // return a string to show that the value got here
-            var resp = Request.CreateResponse(HttpStatusCode.OK, string.Empty);
-            resp.Content = new StringContent(album.AlbumName + " " + album.Entered.ToString(),
-                                                Encoding.UTF8, "text/plain");
+            var resp = Request.CreateResponse<string>(HttpStatusCode.OK, 
+                               album.AlbumName + " " + album.Entered.ToString());
             return resp;
         }
 

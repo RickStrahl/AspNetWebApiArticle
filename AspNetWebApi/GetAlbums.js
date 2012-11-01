@@ -21,7 +21,7 @@ $(document).ready(function () {
 
 page.initialize = function () {   
     // status bar configuration (ww.jquery.js)
-    showStatus({ autoHide: true });
+    showStatus({ autoClose: true });
 
     page.resizeFrame();
     setTimeout(function () { $(window).resize(page.resizeFrame) }, 30);
@@ -89,9 +89,8 @@ page.loadAlbum = function (id) {
             page.albumView = ko.mapping.fromJS(album);
             ko.applyBindings(page.albumView, $dialog[0]);
         }
-        else
+        else            
             ko.mapping.fromJS(album, page.albumView);
-
     });
 }
 
@@ -117,12 +116,12 @@ page.newAlbumDialog = function () {
 
     // bind with empty data
     var data = page.getEmptyAlbum();
-
+    
     // map to ko view model
-    if (page.editalbumFirstBind) {
+    if (!page.albumEditView) {
         albumEditView = ko.mapping.fromJS(data);
         ko.applyBindings(albumEditView, $("#divAddAlbumDialog")[0]);
-        page.editalbumFirstBind = false;
+        //page.editalbumFirstBind = false;
     }
     else
         ko.mapping.fromJS(data, albumEditView);
@@ -174,12 +173,7 @@ page.saveStaticAlbum = function() {
             // reload list of albums
             page.loadAlbums();
         },
-        error: function (xhr, status, p3, p4) {
-            var err = "An error occurred while sending the new album. Unknown error.";
-            if (xhr.responseText && xhr.responseText[0] == "{")
-                err = JSON.parse(xhr.responseText).message;
-            alert(err);
-        }
+        error: jqError
     });
 }
 page.saveAlbum = function () {
@@ -203,12 +197,7 @@ page.saveAlbum = function () {
 
             $("#divAddAlbumDialog").hide();
         },
-        error: function (xhr, status, p3, p4) {
-            var err = "Error";
-            if (xhr.responseText && xhr.responseText[0] == "{")
-                err = JSON.parse(xhr.responseText).message;
-            alert(err);
-        }
+        error: jqError
     });
 }
 page.addSong = function () {
@@ -225,7 +214,6 @@ page.addSong = function () {
     $("#SongName").val("").focus();
     $("#SongLength").val("")
 }
-
 page.reloadAlbumsClick =     function () {
     // force original albums to display            
     $.getJSON("albums/rpc/ResetAlbumData", function () {
@@ -240,10 +228,13 @@ page.resizeFrame = function () {
 }
 
 
-function jqError(xhr, status) {
-    var err = "Error";
-    if (xhr.responseText &&
-        xhr.responseText[0] == "{")
-        err = JSON.parse(xhr.responseText).message;
+function jqError(xhr, status,p3,p4) {    
+    var error = JSON.parse(xhr.responseText);
+    var err = error.message || error.Message || "Error";
+    if (error.errors) {
+        for (var i = 0; i < error.errors.length; i++) {
+            err += "\r\n" + error.errors[i];
+        }
+    }
     showStatus(err, 4000);
 }

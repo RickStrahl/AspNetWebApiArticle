@@ -10,14 +10,14 @@
     <script src="scripts/ww.jquery.js" type="text/javascript"></script>
     <script src="scripts/knockout-2.0.0.js" type="text/javascript"></script>
     <script src="scripts/knockout-mapping.js" type="text/javascript"></script>
-    <script src="GetAlbums.js" type="text/javascript"></script>
- 
+   
+    <script src="GetAlbums.js" type="text/javascript"></script> 
 </head>
 <body>
     <h1>Album Display Demo</h1>
 
     <div class="toolbarcontainer">
-      <a href="~/default.htm" class="hoverbutton"><img src="css/images/home.gif" /> Back to Samples</a>
+      <a href="default.htm" class="hoverbutton"><img src="css/images/home.gif" /> Back to Samples</a>
       <a href="#" id="btnLoadData" class="hoverbutton"><img src="images/load16.png" /> Load Albums</a>
       <a href="#" id="btnSendAlbum" class="hoverbutton"><img src="css/images/new.gif" /> Add PowerAge Album</a>
       <a href="#" id="btnAddNewAlbum" class="hoverbutton"><img src="css/images/new.gif" /> Add new Album</a>
@@ -34,7 +34,7 @@
                     <img class="removeimage rightalign hoverbutton" src="Css/Images/Remove.gif" />
                     <img class="list-image" data-bind="attr: {src:AlbumImageUrl}"  />
                     <div style="font-weight: bold;margin: 5px 0;">
-                        <a href="#" data-bind="text:AlbumName,attr: {'data-id': AlbumName}"  class="albumlink"  ></a>
+                        <a href="#" data-bind="text:AlbumName,attr: {'data-id': AlbumName}" class="albumlink"  ></a>
                     </div>
                     <div class="smalltext" style="color: darkblue;">
                         <span data-bind="text:Artist" ></span>

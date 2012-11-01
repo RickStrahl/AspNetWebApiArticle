@@ -24,7 +24,8 @@ namespace AspNetWebApi
             else if (exType == typeof(ArgumentException))
                 status = HttpStatusCode.NotFound;
 
-            var apiError = new ApiMessageError() { message = context.Exception.Message };
+            var apiError = new ApiMessageError() 
+            { message = context.Exception.Message };
 
             // create a new response and attach our ApiError object
             // which now gets returned on ANY exception result

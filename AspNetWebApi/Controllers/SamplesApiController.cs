@@ -19,9 +19,10 @@ namespace AspNetWebApi
     /// Sample API Controller that demonstrates various different
     /// kinds of data types that can be passed and returned
     /// </summary>    
-    [UnhandledExceptionFilter]
+    //[UnhandledExceptionFilter]
     public class SamplesApiController : ApiController
     {
+
 
         [HttpGet]
         public void ThrowException()
@@ -32,12 +33,13 @@ namespace AspNetWebApi
         [HttpGet]
         public void ThrowError()
         {
-
             var resp = Request.CreateResponse<ApiMessageError>(
                     HttpStatusCode.BadRequest,
                     new ApiMessageError("Your code stinks!"));
             throw new HttpResponseException(resp);            
         }
+
+
 
         /// <summary>
         /// Using CreateErrorResponse native in Web API produces
@@ -51,6 +53,8 @@ namespace AspNetWebApi
             ex.Source = "Source code";
             ///ex.StackTrace = "Stack Trace";
 
+            //return Request.CreateErrorResponse(HttpStatusCode.BadRequest, 
+            //                                   "Baaaaad Code");
             return Request.CreateErrorResponse(HttpStatusCode.BadRequest,ex);            
         }
         
@@ -64,17 +68,9 @@ namespace AspNetWebApi
                 list.Add("Rick");
             }
             catch (Exception ex)
-            { ThrowSafeException(ex.Message); }
-        }
-
-        
-
-        [HttpGet]
-        public HttpResponseMessage ReturnAlbum(string title)
-        {
-            var album = new Album();
-            var resp = Request.CreateResponse<Album>(HttpStatusCode.OK, album);
-            return resp;
+            { 
+                ThrowSafeException(ex.Message); 
+            }
         }
 
 
@@ -305,23 +301,24 @@ namespace AspNetWebApi
             return string.Format("Name: {0}, Value: {1}, Date: {2}, Action: {3}", nve.name, nve.value, nve.entered, action);
         }
 
-[HttpPost]
-public Task<string> PostFileValues()
-{
-    string root = HttpContext.Current.Server.MapPath("~/");
-    var provider = new MultipartFormDataStreamProvider(root);
+        [HttpPost]
+        public Task<string> PostFileValues()
+        {
+            string root = HttpContext.Current.Server.MapPath("~/");
+            var provider = new MultipartFormDataStreamProvider(root);
 
-    Task<string> res = Request.Content
-            .ReadAsMultipartAsync(provider)
-            .ContinueWith(itask =>
-            {
-                var count = provider.FileData.Count;
+            Task<string> res = Request.Content
+                    .ReadAsMultipartAsync(provider)
+                    .ContinueWith(itask =>
+                    {
+                        var count = provider.FileData.Count;
 
-                // ... do something with files
-                return count + " files";
-            });
-    return res;                         
-}
+                        // ... do something with files
+                        return count + " files";
+                    });
+
+            return res;                         
+        }
 
         private struct AsyncVoid
         {
