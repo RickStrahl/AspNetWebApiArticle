@@ -126,7 +126,6 @@
     <Content Include="scripts\knockout-mapping.js" />
     <Content Include="scripts\jquery-vsdoc.js" />
     <Content Include="scripts\jquery.js" />
-    <Content Include="scripts\jquery.min-vsdoc.js" />
     <Content Include="scripts\jquery.min.js" />
     <Content Include="scripts\knockout-2.0.0.js" />
     <Content Include="scripts\ww.jquery.js" />

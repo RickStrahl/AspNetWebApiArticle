@@ -7,10 +7,11 @@ Most of the examples are contained in the GetAlbums.htm/js pages with the AlbumA
 in the SamplesApiController.
 
 ### Solution Configuration###
-This project currently works with the ASP.NET MVC RC using .NET 4.0 runtime. 
+This project works with the ASP.NET MVC Release using .NET 4.0 runtime. 
 
-Even though this project contains the RC files, all of the dependencies 
-are loaded via NuGet, so these examples should all work as is even if you
-don't have a previous MVC4 installation.
+This is a VS2012 project, but it opens fine and works in VS2010.
 
-I will update these examples again once MVC 4 hits RTM.
+Project should run as is after initial compilation in Visual Studio. Note
+that NuGet packages are not shipped and NuGet Package Restore is enabled
+so you need to be online (or have NuGet packages cached) in order for
+the project to pull in all the MVC/WebAPI NuGet references.
