@@ -92,7 +92,6 @@ namespace AspNetWebApi
                    .IncludeErrorDetailPolicy = 
                     IncludeErrorDetailPolicy.Always;            
             
-
             // Add JavaScriptSerializer  formatter instead - add at top to make default
             //config.Formatters.Insert(0, new JavaScriptSerializerFormatter());
 
@@ -118,8 +117,8 @@ namespace AspNetWebApi
             config.Filters.Add(new UnhandledExceptionFilter());
 
             // Attach simple post variable binding
-            config.ParameterBindingRules
-                  .Insert(0, SimplePostVariableParameterBinding.HookupParameterBinding);
+            //config.ParameterBindingRules
+            //      .Insert(0, SimplePostVariableParameterBinding.HookupParameterBinding);
         }
 
     }
