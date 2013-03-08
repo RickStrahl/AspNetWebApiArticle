@@ -123,6 +123,7 @@
     <Content Include="Global.asax" />
     <Content Include="JsonpClient.htm" />
     <Content Include="RpcCalls.htm" />
+    <Content Include="scripts\_reference.js" />
     <Content Include="scripts\knockout-mapping.js" />
     <Content Include="scripts\jquery-vsdoc.js" />
     <Content Include="scripts\jquery.js" />
