@@ -123,6 +123,7 @@
     <Content Include="Global.asax" />
     <Content Include="JsonpClient.htm" />
     <Content Include="RpcCalls.htm" />
+    <Content Include="SailBig.jpg" />
     <Content Include="scripts\_reference.js" />
     <Content Include="scripts\knockout-mapping.js" />
     <Content Include="scripts\jquery-vsdoc.js" />
@@ -142,6 +143,8 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Code\WebApi\Binders\NakedBodyAttribute.cs" />
+    <Compile Include="Code\WebApi\Binders\NakedBodyParameterBinding.cs" />
     <Compile Include="Code\WebApi\Filters\ApiMessageError.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -117,8 +117,8 @@ namespace AspNetWebApi
             config.Filters.Add(new UnhandledExceptionFilter());
 
             // Attach simple post variable binding
-            //config.ParameterBindingRules
-            //      .Insert(0, SimplePostVariableParameterBinding.HookupParameterBinding);
+            config.ParameterBindingRules
+                  .Insert(0, SimplePostVariableParameterBinding.HookupParameterBinding);
         }
 
     }

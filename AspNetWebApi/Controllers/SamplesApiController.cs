@@ -313,12 +313,34 @@ namespace AspNetWebApi
                     {
                         var count = provider.FileData.Count;
 
-                        // ... do something with files
+                        // ... do something with files                        
                         return count + " files";
                     });
 
             return res;                         
         }
+
+        [HttpPost]
+        public string PostRawBuffer([NakedBody] string raw)
+        {
+            return raw;
+        }
+
+        [HttpPost]
+        public string PostBinaryBuffer([NakedBody] byte[] raw)
+        {
+            return raw.Length + " bytes sent";
+        }
+
+        [HttpPost]
+        public string PostJsonString(string raw)
+        {
+            return raw;
+        }
+
+
+
+
 
         private struct AsyncVoid
         {
@@ -332,6 +354,10 @@ namespace AspNetWebApi
         public string Password { get; set; }
     }
 
+    public class RawBuffer
+    {
+        public string Data { get; set; }
+    }
 
     public class User
     {
