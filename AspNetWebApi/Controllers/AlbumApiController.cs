@@ -48,8 +48,7 @@ namespace AspNetWebApi.Controllers
                             .SingleOrDefault(alb => alb.AlbumName.Contains(title));
             return album;
         }
-
-
+        
         public HttpResponseMessage PostAlbum(Album album)
         {            
             if (!this.ModelState.IsValid)

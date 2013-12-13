@@ -36,7 +36,7 @@ namespace AspNetWebApi
             var resp = Request.CreateResponse<ApiMessageError>(
                     HttpStatusCode.BadRequest,
                     new ApiMessageError("Your code stinks!"));
-            throw new HttpResponseException(resp);            
+            throw new HttpResponseException(resp);
         }
 
 
@@ -55,9 +55,9 @@ namespace AspNetWebApi
 
             //return Request.CreateErrorResponse(HttpStatusCode.BadRequest, 
             //                                   "Baaaaad Code");
-            return Request.CreateErrorResponse(HttpStatusCode.BadRequest,ex);            
+            return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
         }
-        
+
 
         [HttpGet]
         public void ThrowErrorSafe()
@@ -68,8 +68,8 @@ namespace AspNetWebApi
                 list.Add("Rick");
             }
             catch (Exception ex)
-            { 
-                ThrowSafeException(ex.Message); 
+            {
+                ThrowSafeException(ex.Message);
             }
         }
 
@@ -279,17 +279,17 @@ namespace AspNetWebApi
             newAlbum.AlbumName = album.AlbumName + " New";
             newAlbum.NewProperty = "something new";
             newAlbum.Songs = new JArray();
-    
+
             foreach (dynamic song in album.Songs)
             {
-                song.SongName = song.SongName + " New"; 
-                newAlbum.Songs.Add(song);                
+                song.SongName = song.SongName + " New";
+                newAlbum.Songs.Add(song);
             }
-            
+
             return newAlbum;
         }
 
-        [HttpPost,HttpGet]
+        [HttpPost, HttpGet]
         public string PostMultipleSimpleValues(string name, int value, DateTime entered, string action = null)
         {
             return string.Format("Name: {0}, Value: {1}, Date: {2}, Action: {3}", name, value, entered, action);
@@ -317,7 +317,7 @@ namespace AspNetWebApi
                         return count + " files";
                     });
 
-            return res;                         
+            return res;
         }
 
         [HttpPost]
@@ -333,19 +333,23 @@ namespace AspNetWebApi
         }
 
         [HttpPost]
-        public string PostJsonString(string raw)
+        public string PostJsonString([FromBody] string raw)
         {
             return raw;
         }
 
-
-
-
-
-        private struct AsyncVoid
+        [HttpPost]
+        public int PostJsonNumber([FromBody] int value)
         {
+            return value;
         }
 
+        [HttpPost]
+        public async Task<string> PostRawBufferManual()
+        {
+            string result = await Request.Content.ReadAsStringAsync();
+            return result;
+        }
     }
 
     public class LoginData
